@@ -103,11 +103,18 @@
                             <a href="{{ route('peminjaman.index') }}"
                                 class="nav-link {{ request()->routeIs('peminjaman.*') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-hand-holding"></i>
-                                <p>Peminjaman</p>
+                                <p>Peminjaman (Aset)</p>
                             </a>
                         </li>
 
                         @hasanyrole('Super Admin|Petugas Sarpras')
+                        <li class="nav-item">
+                            <a href="{{ route('penggunaan-bhp.index') }}"
+                                class="nav-link {{ request()->routeIs('penggunaan-bhp.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-sign-out-alt"></i>
+                                <p>Distribusi (BHP)</p>
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a href="{{ route('pemeliharaan.index') }}"
                                 class="nav-link {{ request()->routeIs('pemeliharaan.*') ? 'active' : '' }}">

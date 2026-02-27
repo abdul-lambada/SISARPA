@@ -82,6 +82,34 @@ class DummyDataSeeder extends Seeder
                 'lokasi' => 'Gudang Sarpras',
                 'kondisi' => 'servis',
                 'stok' => 1,
+                'tipe' => 'aset',
+                'min_stok' => 0
+            ],
+            [
+                'kategori_id' => Kategori::where('nama_kategori', 'Stationery')->first()->id,
+                'kode_barang' => 'BHP-001',
+                'nama_barang' => 'Kertas A4 80gr',
+                'merk' => 'PaperOne',
+                'spesifikasi' => '80 GSM, 1 Ream',
+                'lokasi' => 'Gudang Sarpras',
+                'kondisi' => 'baik',
+                'stok' => 50,
+                'min_stok' => 10,
+                'tipe' => 'bhp',
+                'satuan' => 'Rim'
+            ],
+            [
+                'kategori_id' => Kategori::where('nama_kategori', 'Stationery')->first()->id,
+                'kode_barang' => 'BHP-002',
+                'nama_barang' => 'Spidol Boardmarker Hitam',
+                'merk' => 'Snowman',
+                'spesifikasi' => 'Ink refillable',
+                'lokasi' => 'Gudang Sarpras',
+                'kondisi' => 'baik',
+                'stok' => 3,
+                'min_stok' => 10,
+                'tipe' => 'bhp',
+                'satuan' => 'Pcs'
             ],
         ];
 

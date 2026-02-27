@@ -22,12 +22,12 @@
                         <thead>
                             <tr>
                                 <th width="30px">No</th>
+                                <th>Jenis</th>
                                 <th>Kode</th>
                                 <th>Nama Barang</th>
                                 <th>Kategori</th>
-                                <th>Lokasi</th>
-                                <th>Kondisi</th>
                                 <th>Stok</th>
+                                <th>Satuan</th>
                                 <th width="120px">Aksi</th>
                             </tr>
                         </thead>
@@ -47,19 +47,19 @@
                 ajax: "{{ route('barang.index') }}",
                 columns: [
                     { data: 'DT_RowIndex', name: 'DT_RowIndex' },
+                    { data: 'tipe_badge', name: 'tipe' },
                     { data: 'kode_barang', name: 'kode_barang' },
                     { data: 'nama_barang', name: 'nama_barang' },
                     { data: 'nama_kategori', name: 'nama_kategori' },
-                    { data: 'lokasi', name: 'lokasi' },
                     {
-                        data: 'kondisi', name: 'kondisi', render: function (data) {
-                            let badge = 'badge-success';
-                            if (data == 'rusak') badge = 'badge-danger';
-                            if (data == 'servis') badge = 'badge-warning';
-                            return '<span class="badge ' + badge + '">' + data.toUpperCase() + '</span>';
+                        data: 'stok', name: 'stok', render: function (data, type, row) {
+                            if (row.tipe == 'bhp' && data <= row.min_stok) {
+                                return '<span class="text-danger font-weight-bold">' + data + ' (Kritis)</span>';
+                            }
+                            return data;
                         }
                     },
-                    { data: 'stok', name: 'stok' },
+                    { data: 'satuan', name: 'satuan' },
                     { data: 'action', name: 'action', orderable: false, searchable: false },
                 ]
             });

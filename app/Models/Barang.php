@@ -13,13 +13,16 @@ class Barang extends Model
     protected $table = 'barang';
     protected $fillable = [
         'kategori_id',
+        'tipe',
         'kode_barang',
         'nama_barang',
+        'satuan',
         'merk',
         'spesifikasi',
         'lokasi',
         'kondisi',
         'stok',
+        'min_stok',
         'foto_barang'
     ];
 
@@ -36,5 +39,10 @@ class Barang extends Model
     public function pemeliharaans()
     {
         return $this->hasMany(Pemeliharaan::class, 'barang_id');
+    }
+
+    public function penggunaanBhps()
+    {
+        return $this->hasMany(PenggunaanBhp::class, 'barang_id');
     }
 }

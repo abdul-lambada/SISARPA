@@ -6,6 +6,7 @@ use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\PemeliharaanController;
+use App\Http\Controllers\PenggunaanBhpController;
 use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
@@ -29,6 +30,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('barang/export', [BarangController::class, 'export'])->name('barang.export');
         Route::resource('barang', BarangController::class);
         Route::resource('pemeliharaan', PemeliharaanController::class);
+        Route::resource('penggunaan-bhp', PenggunaanBhpController::class);
         Route::post('peminjaman/kembalikan/{id}', [PeminjamanController::class, 'kembalikan'])->name('peminjaman.kembalikan');
     });
 
