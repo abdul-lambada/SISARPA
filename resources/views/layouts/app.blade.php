@@ -97,6 +97,13 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{ route('ruangan.index') }}"
+                                class="nav-link {{ request()->routeIs('ruangan.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-door-open"></i>
+                                <p>Data Ruangan</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ route('stock-opname.index') }}"
                                 class="nav-link {{ request()->routeIs('stock-opname.*') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-clipboard-check"></i>
@@ -111,6 +118,13 @@
                                 class="nav-link {{ request()->routeIs('peminjaman.*') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-hand-holding"></i>
                                 <p>Peminjaman (Aset)</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('reservasi.index') }}"
+                                class="nav-link {{ request()->routeIs('reservasi.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-calendar-alt"></i>
+                                <p>Reservasi (Ruangan)</p>
                             </a>
                         </li>
 

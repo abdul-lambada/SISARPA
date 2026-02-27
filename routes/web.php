@@ -8,6 +8,8 @@ use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\PemeliharaanController;
 use App\Http\Controllers\PenggunaanBhpController;
 use App\Http\Controllers\StockOpnameController;
+use App\Http\Controllers\RuanganController;
+use App\Http\Controllers\ReservasiController;
 use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
@@ -38,9 +40,13 @@ Route::middleware(['auth'])->group(function () {
         Route::post('stock-opname/finalize/{id}', [StockOpnameController::class, 'finalize'])->name('stock-opname.finalize');
         Route::resource('stock-opname', StockOpnameController::class);
 
+        Route::resource('ruangan', RuanganController::class);
+        Route::post('reservasi/update-status/{id}', [ReservasiController::class, 'updateStatus'])->name('reservasi.update-status');
+
         Route::post('peminjaman/kembalikan/{id}', [PeminjamanController::class, 'kembalikan'])->name('peminjaman.kembalikan');
     });
 
     // All Auth Users
     Route::resource('peminjaman', PeminjamanController::class)->only(['index', 'create', 'store', 'destroy']);
+    Route::resource('reservasi', ReservasiController::class)->only(['index', 'create', 'store', 'destroy']);
 });
