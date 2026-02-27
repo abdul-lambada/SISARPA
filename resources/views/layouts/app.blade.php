@@ -96,6 +96,13 @@
                                 <p>Data Barang</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('stock-opname.index') }}"
+                                class="nav-link {{ request()->routeIs('stock-opname.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-clipboard-check"></i>
+                                <p>Stock Opname</p>
+                            </a>
+                        </li>
                         @endhasanyrole
 
                         <li class="nav-header">TRANSAKSI</li>

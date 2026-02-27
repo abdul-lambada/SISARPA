@@ -7,6 +7,7 @@ use App\Http\Controllers\BarangController;
 use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\PemeliharaanController;
 use App\Http\Controllers\PenggunaanBhpController;
+use App\Http\Controllers\StockOpnameController;
 use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
@@ -31,6 +32,12 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('barang', BarangController::class);
         Route::resource('pemeliharaan', PemeliharaanController::class);
         Route::resource('penggunaan-bhp', PenggunaanBhpController::class);
+
+        Route::get('stock-opname/scan/{id}', [StockOpnameController::class, 'scan'])->name('stock-opname.scan');
+        Route::post('stock-opname/update-scan/{id}', [StockOpnameController::class, 'updateScan'])->name('stock-opname.update-scan');
+        Route::post('stock-opname/finalize/{id}', [StockOpnameController::class, 'finalize'])->name('stock-opname.finalize');
+        Route::resource('stock-opname', StockOpnameController::class);
+
         Route::post('peminjaman/kembalikan/{id}', [PeminjamanController::class, 'kembalikan'])->name('peminjaman.kembalikan');
     });
 
