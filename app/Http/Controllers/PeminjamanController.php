@@ -2,63 +2,113 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Peminjaman;
+use App\Models\Barang;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Auth;
 
 class PeminjamanController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        if ($request->ajax()) {
+            $query = Peminjaman::with(['barang', 'user']);
+
+            if (!auth()->user()->hasAnyRole(['Super Admin', 'Petugas Sarpras'])) {
+                $query->where('user_id', auth()->id());
+            }
+
+            $data = $query->latest()->get();
+
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('nama_barang', function ($row) {
+                    return $row->barang->nama_barang;
+                })
+                ->addColumn('nama_peminjam', function ($row) {
+                    return $row->user->name;
+                })
+                ->addColumn('action', function ($row) {
+                    $btn = '';
+                    if ($row->status == 'dipinjam' && auth()->user()->hasAnyRole(['Super Admin', 'Petugas Sarpras'])) {
+                        $btn .= '<button type="button" onclick="kembalikanBarang(' . $row->id . ')" class="btn btn-success btn-sm"><i class="fas fa-undo"></i> Kembalikan</button> ';
+                    }
+
+                    if (auth()->user()->hasAnyRole(['Super Admin', 'Petugas Sarpras'])) {
+                        $btn .= '<button type="button" onclick="confirmDelete(' . $row->id . ', \'delete-form-' . $row->id . '\')" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></button>';
+                        $btn .= '<form id="delete-form-' . $row->id . '" action="' . route('peminjaman.destroy', $row->id) . '" method="POST" style="display:none;">' . csrf_field() . method_field('DELETE') . '</form>';
+                    }
+                    return $btn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+        return view('peminjaman.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        $barangs = Barang::where('stok', '>', 0)->where('kondisi', 'baik')->get();
+        $users = User::role('User')->get();
+        if (auth()->user()->hasRole('User')) {
+            $users = collect([auth()->user()]);
+        }
+        return view('peminjaman.create', compact('barangs', 'users'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'barang_id' => 'required|exists:barang,id',
+            'user_id' => 'required|exists:users,id',
+            'tanggal_pinjam' => 'required|date',
+            'catatan' => 'nullable|string',
+        ]);
+
+        $barang = Barang::findOrFail($request->barang_id);
+        if ($barang->stok <= 0) {
+            return back()->with('error', 'Stok barang habis.');
+        }
+
+        Peminjaman::create([
+            'barang_id' => $request->barang_id,
+            'user_id' => $request->user_id,
+            'tanggal_pinjam' => $request->tanggal_pinjam,
+            'status' => 'dipinjam',
+            'catatan' => $request->catatan,
+        ]);
+
+        $barang->decrement('stok');
+
+        return redirect()->route('peminjaman.index')->with('success', 'Peminjaman berhasil dicatat.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function kembalikan(Request $request, $id)
     {
-        //
+        $peminjaman = Peminjaman::findOrFail($id);
+
+        if ($peminjaman->status == 'dikembalikan') {
+            return response()->json(['error' => 'Barang sudah dikembalikan.'], 400);
+        }
+
+        $peminjaman->update([
+            'tanggal_kembali' => now(),
+            'status' => 'dikembalikan'
+        ]);
+
+        $peminjaman->barang->increment('stok');
+
+        return response()->json(['success' => 'Barang berhasil dikembalikan.']);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function destroy(Peminjaman $peminjaman)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        if ($peminjaman->status == 'dipinjam') {
+            $peminjaman->barang->increment('stok');
+        }
+        $peminjaman->delete();
+        return redirect()->route('peminjaman.index')->with('success', 'Riwayat peminjaman dihapus.');
     }
 }
