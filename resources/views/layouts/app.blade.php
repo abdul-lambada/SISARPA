@@ -117,6 +117,12 @@
                                 <p>Manajemen User</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('settings.backup') }}" class="nav-link">
+                                <i class="nav-icon fas fa-database"></i>
+                                <p>Backup Database</p>
+                            </a>
+                        </li>
                         @endhasanyrole
 
                         <li class="nav-header">TRANSAKSI</li>
@@ -162,6 +168,13 @@
                                 class="nav-link {{ request()->routeIs('pemeliharaan.analysis') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-chart-area"></i>
                                 <p>Analisis Biaya</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('laporan.mutasi') }}"
+                                class="nav-link {{ request()->routeIs('laporan.mutasi*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-file-invoice"></i>
+                                <p>Laporan Mutasi</p>
                             </a>
                         </li>
                         @endhasanyrole

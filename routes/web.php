@@ -37,6 +37,10 @@ Route::middleware(['auth'])->group(function () {
         
         Route::get('pemeliharaan/analysis', [PemeliharaanController::class, 'analysis'])->name('pemeliharaan.analysis');
         Route::resource('pemeliharaan', PemeliharaanController::class);
+        
+        Route::get('laporan/mutasi', [\App\Http\Controllers\LaporanMutasiController::class, 'index'])->name('laporan.mutasi');
+        Route::get('laporan/mutasi/print', [\App\Http\Controllers\LaporanMutasiController::class, 'print'])->name('laporan.mutasi.print');
+        
         Route::resource('penggunaan-bhp', PenggunaanBhpController::class);
 
         Route::get('stock-opname/scan/{id}', [StockOpnameController::class, 'scan'])->name('stock-opname.scan');
@@ -50,7 +54,10 @@ Route::middleware(['auth'])->group(function () {
         Route::post('users/import', [UserController::class, 'import'])->name('users.import');
         Route::resource('users', UserController::class);
 
+        Route::get('settings/backup', [\App\Http\Controllers\BackupController::class, 'download'])->name('settings.backup');
+        
         Route::post('peminjaman/kembalikan/{id}', [PeminjamanController::class, 'kembalikan'])->name('peminjaman.kembalikan');
+        Route::get('peminjaman/print-bast/{peminjaman}', [PeminjamanController::class, 'printBast'])->name('peminjaman.print-bast');
     });
 
     // All Auth Users

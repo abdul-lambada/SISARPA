@@ -31,7 +31,8 @@ class PeminjamanController extends Controller
                     return $row->user->name;
                 })
                 ->addColumn('action', function ($row) {
-                    $btn = '<a href="' . route('peminjaman.show', $row->id) . '" class="btn btn-info btn-sm"><i class="fas fa-file-invoice"></i> Bukti</a> ';
+                    $btn = '<a href="' . route('peminjaman.show', $row->id) . '" class="btn btn-info btn-sm" title="Bukti Digital"><i class="fas fa-file-invoice"></i></a> ';
+                    $btn .= '<a href="' . route('peminjaman.print-bast', $row->id) . '" target="_blank" class="btn btn-dark btn-sm" title="Cetak BAST PDF"><i class="fas fa-print"></i></a> ';
                     
                     if ($row->status == 'dipinjam' && auth()->user()->hasAnyRole(['Super Admin', 'Petugas Sarpras'])) {
                         $btn .= '<button type="button" onclick="kembalikanBarang(' . $row->id . ')" class="btn btn-success btn-sm"><i class="fas fa-undo"></i></button> ';
@@ -129,5 +130,14 @@ class PeminjamanController extends Controller
         }
         $peminjaman->delete();
         return redirect()->route('peminjaman.index')->with('success', 'Riwayat peminjaman dihapus.');
+    }
+
+    public function printBast(Peminjaman $peminjaman)
+    {
+        $peminjaman->load(['barang', 'user']);
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('peminjaman.bast_pdf', compact('peminjaman'));
+        $pdf->setPaper('a4', 'portrait');
+        
+        return $pdf->stream('BAST-' . $peminjaman->id . '.pdf');
     }
 }
