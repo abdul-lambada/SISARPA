@@ -55,6 +55,8 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('users', UserController::class);
 
         Route::get('settings/backup', [\App\Http\Controllers\BackupController::class, 'download'])->name('settings.backup');
+        Route::get('activity-logs', [\App\Http\Controllers\ActivityLogController::class, 'index'])->name('activity-logs.index');
+        Route::get('activity-logs/{id}', [\App\Http\Controllers\ActivityLogController::class, 'show'])->name('activity-logs.show');
         
         Route::post('peminjaman/kembalikan/{id}', [PeminjamanController::class, 'kembalikan'])->name('peminjaman.kembalikan');
         Route::get('peminjaman/print-bast/{peminjaman}', [PeminjamanController::class, 'printBast'])->name('peminjaman.print-bast');

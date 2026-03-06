@@ -162,6 +162,39 @@
                 </div>
             </div>
         </div>
+
+        <!-- Jadwal Servis Rutin -->
+        <div class="col-md-6">
+            <div class="card card-outline card-info">
+                <div class="card-header">
+                    <h3 class="card-title text-bold text-info"><i class="fas fa-tools mr-1"></i> Jadwal Servis Mendatang</h3>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-sm">
+                        <thead class="bg-light">
+                            <tr>
+                                <th>Barang</th>
+                                <th>Lokasi</th>
+                                <th>Tgl Servis</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($maintenance_reminders as $mr)
+                            <tr>
+                                <td>{{ $mr->nama_barang }}</td>
+                                <td>{{ $mr->lokasi }}</td>
+                                <td><span class="text-danger font-weight-bold">{{ \Carbon\Carbon::parse($mr->tgl_servis_berikutnya)->format('d/m/Y') }}</span></td>
+                                <td><span class="badge badge-info small">Segera</span></td>
+                            </tr>
+                            @empty
+                            <tr><td colspan="4" class="text-center py-3 text-muted">Tidak ada jadwal servis dalam waktu dekat.</td></tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="row">

@@ -23,6 +23,7 @@ class Barang extends Model
         'kondisi',
         'stok',
         'min_stok',
+        'tgl_servis_berikutnya',
         'foto_barang'
     ];
 

@@ -10,6 +10,7 @@ use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\Storage;
 use App\Exports\BarangExport;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Helpers\LogHelper;
 
 class BarangController extends Controller
 {
@@ -60,6 +61,7 @@ class BarangController extends Controller
             'kondisi' => 'required|in:baik,rusak,servis',
             'stok' => 'required|integer|min:0',
             'min_stok' => 'required|integer|min:0',
+            'tgl_servis_berikutnya' => 'nullable|date',
             'foto_barang' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
@@ -69,7 +71,8 @@ class BarangController extends Controller
             $data['foto_barang'] = $request->file('foto_barang')->store('barang', 'public');
         }
 
-        Barang::create($data);
+        $barang = Barang::create($data);
+        LogHelper::log('Menambahkan barang baru: ' . $barang->nama_barang, $barang, $data);
 
         return redirect()->route('barang.index')->with('success', 'Barang berhasil ditambahkan.');
     }
@@ -100,6 +103,7 @@ class BarangController extends Controller
             'kondisi' => 'required|in:baik,rusak,servis',
             'stok' => 'required|integer|min:0',
             'min_stok' => 'required|integer|min:0',
+            'tgl_servis_berikutnya' => 'nullable|date',
             'foto_barang' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
@@ -113,16 +117,19 @@ class BarangController extends Controller
         }
 
         $barang->update($data);
+        LogHelper::log('Memperbarui data barang: ' . $barang->nama_barang, $barang, $data);
 
         return redirect()->route('barang.index')->with('success', 'Barang berhasil diperbarui.');
     }
 
     public function destroy(Barang $barang)
     {
+        $oldData = $barang->toArray();
         if ($barang->foto_barang) {
             Storage::disk('public')->delete($barang->foto_barang);
         }
         $barang->delete();
+        LogHelper::log('Menghapus barang: ' . $oldData['nama_barang'], null, $oldData);
         return redirect()->route('barang.index')->with('success', 'Barang berhasil dihapus.');
     }
 

@@ -48,6 +48,13 @@ class DashboardController extends Controller
             ->latest()
             ->get();
 
+        // Jadwal Servis Mendatang (7 hari ke depan)
+        $data['maintenance_reminders'] = Barang::where('tipe', 'aset')
+            ->whereNotNull('tgl_servis_berikutnya')
+            ->where('tgl_servis_berikutnya', '<=', now()->addDays(7))
+            ->where('tgl_servis_berikutnya', '>=', now())
+            ->get();
+
         return view('dashboard', $data);
     }
 }

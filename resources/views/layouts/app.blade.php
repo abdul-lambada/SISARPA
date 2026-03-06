@@ -123,6 +123,13 @@
                                 <p>Backup Database</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('activity-logs.index') }}"
+                                class="nav-link {{ request()->routeIs('activity-logs.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-history"></i>
+                                <p>Log Aktivitas</p>
+                            </a>
+                        </li>
                         @endhasanyrole
 
                         <li class="nav-header">TRANSAKSI</li>
