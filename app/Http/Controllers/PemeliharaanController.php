@@ -80,4 +80,31 @@ class PemeliharaanController extends Controller
         $pemeliharaan->delete();
         return redirect()->route('pemeliharaan.index')->with('success', 'Data pemeliharaan dihapus.');
     }
+
+    public function analysis()
+    {
+        // 1. Tren Biaya Bulanan (6 bulan terakhir)
+        $monthlyCosts = Pemeliharaan::selectRaw('SUM(biaya) as total, DATE_FORMAT(tanggal_servis, "%M %Y") as month, MONTH(tanggal_servis) as m')
+            ->groupBy('month', 'm')
+            ->orderBy('tanggal_servis', 'asc')
+            ->take(6)
+            ->get();
+
+        // 2. Biaya Per Kategori
+        $categoryCosts = Pemeliharaan::join('barang', 'pemeliharaan.barang_id', '=', 'barang.id')
+            ->join('kategori', 'barang.kategori_id', '=', 'kategori.id')
+            ->selectRaw('SUM(pemeliharaan.biaya) as total, kategori.nama_kategori')
+            ->groupBy('kategori.nama_kategori')
+            ->get();
+
+        // 3. Top Aset Paling Sering/Mahal Servis (Identifying "Old" Assets)
+        $topAssets = Pemeliharaan::with('barang')
+            ->selectRaw('SUM(biaya) as total_biaya, COUNT(*) as jumlah_servis, barang_id')
+            ->groupBy('barang_id')
+            ->orderBy('total_biaya', 'desc')
+            ->take(5)
+            ->get();
+
+        return view('pemeliharaan.analysis', compact('monthlyCosts', 'categoryCosts', 'topAssets'));
+    }
 }

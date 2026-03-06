@@ -145,9 +145,16 @@
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('pemeliharaan.index') }}"
-                                class="nav-link {{ request()->routeIs('pemeliharaan.*') ? 'active' : '' }}">
+                                class="nav-link {{ request()->routeIs('pemeliharaan.*') && !request()->routeIs('pemeliharaan.analysis') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-tools"></i>
                                 <p>Pemeliharaan</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('pemeliharaan.analysis') }}"
+                                class="nav-link {{ request()->routeIs('pemeliharaan.analysis') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-chart-area"></i>
+                                <p>Analisis Biaya</p>
                             </a>
                         </li>
                         @endhasanyrole

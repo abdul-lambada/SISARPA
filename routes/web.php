@@ -33,6 +33,8 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('barang/export', [BarangController::class, 'export'])->name('barang.export');
         Route::resource('barang', BarangController::class);
+        
+        Route::get('pemeliharaan/analysis', [PemeliharaanController::class, 'analysis'])->name('pemeliharaan.analysis');
         Route::resource('pemeliharaan', PemeliharaanController::class);
         Route::resource('penggunaan-bhp', PenggunaanBhpController::class);
 
