@@ -71,9 +71,14 @@ class PeminjamanController extends Controller
             'user_id' => 'required|exists:users,id',
             'tanggal_pinjam' => 'required|date',
             'catatan' => 'nullable|string',
+            'tanda_tangan' => 'required|string', // Pastikan tanda tangan ada
         ]);
 
         $barang = Barang::findOrFail($request->barang_id);
+        if ($barang->tipe !== 'aset') {
+            return back()->with('error', 'Hanya barang bertipe Aset Tetap yang bisa dipinjam.');
+        }
+
         if ($barang->stok <= 0) {
             return back()->with('error', 'Stok barang habis.');
         }

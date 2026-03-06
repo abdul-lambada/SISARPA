@@ -12,7 +12,7 @@ class RuanganController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Ruangan::latest()->get();
+            $data = Ruangan::latest();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('status_badge', function ($row) {

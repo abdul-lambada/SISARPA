@@ -8,7 +8,9 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-header">
-                    <div class="float-right">
+                        <a href="{{ route('barang.print-labels') }}" class="btn btn-dark mr-2" target="_blank">
+                            <i class="fas fa-print"></i> Cetak Semua Label
+                        </a>
                         <a href="{{ route('barang.export') }}" class="btn btn-success mr-2">
                             <i class="fas fa-file-excel"></i> Export Excel
                         </a>

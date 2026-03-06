@@ -52,6 +52,10 @@ class PenggunaanBhpController extends Controller
 
         $barang = Barang::findOrFail($request->barang_id);
 
+        if ($barang->tipe !== 'bhp') {
+            return back()->with('error', 'Hanya barang bertipe BHP yang bisa didistribusikan di sini.');
+        }
+
         if ($barang->stok < $request->jumlah) {
             return back()->with('error', 'Stok tidak mencukupi. Sisa stok: ' . $barang->stok);
         }

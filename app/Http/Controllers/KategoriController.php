@@ -11,7 +11,7 @@ class KategoriController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Kategori::latest()->get(); // This line should ideally be Kategori::withTrashed()->latest()->get(); if you intend to show trashed items in the main index.
+            $data = Kategori::withTrashed()->latest();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -65,6 +65,10 @@ class KategoriController extends Controller
 
     public function destroy(Kategori $kategori)
     {
+        if ($kategori->barangs()->count() > 0) {
+            return back()->with('error', 'Kategori tidak bisa dihapus karena masih digunakan oleh ' . $kategori->barangs()->count() . ' barang.');
+        }
+
         $kategori->delete();
         return redirect()->route('kategori.index')->with('success', 'Kategori berhasil dipindah ke tempat sampah.');
     }
@@ -72,7 +76,7 @@ class KategoriController extends Controller
     public function trash(Request $request)
     {
         if ($request->ajax()) {
-            $data = Kategori::onlyTrashed()->latest()->get();
+            $data = Kategori::onlyTrashed()->latest();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {

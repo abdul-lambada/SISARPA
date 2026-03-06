@@ -6,6 +6,7 @@ use App\Models\Barang;
 use App\Models\Peminjaman;
 use App\Models\Kategori;
 use App\Models\Reservasi;
+use App\Models\LaporanKerusakan;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -34,6 +35,17 @@ class DashboardController extends Controller
         $data['jatuh_tempo'] = Peminjaman::with(['barang', 'user'])
             ->where('status', 'dipinjam')
             ->where('tanggal_pinjam', '<', now()->subDays(3))
+            ->get();
+
+        // Stok BHP Kritis
+        $data['bhp_kritis'] = Barang::where('tipe', 'bhp')
+            ->whereColumn('stok', '<=', 'min_stok')
+            ->get();
+
+        // Laporan Kerusakan Pending
+        $data['laporan_pending'] = LaporanKerusakan::with(['barang', 'user'])
+            ->where('status', 'pending')
+            ->latest()
             ->get();
 
         return view('dashboard', $data);

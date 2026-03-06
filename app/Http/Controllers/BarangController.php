@@ -130,4 +130,20 @@ class BarangController extends Controller
     {
         return Excel::download(new BarangExport, 'data-barang-' . date('Y-m-d') . '.xlsx');
     }
+
+    public function printLabels(Request $request)
+    {
+        $ids = $request->ids ? explode(',', $request->ids) : [];
+        
+        if (empty($ids)) {
+            $barangs = Barang::all();
+        } else {
+            $barangs = Barang::whereIn('id', $ids)->get();
+        }
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('barang.labels_pdf', compact('barangs'));
+        $pdf->setPaper('a4', 'portrait');
+        
+        return $pdf->stream('label-barang.pdf');
+    }
 }

@@ -134,6 +134,13 @@
                                 <p>Reservasi (Ruangan)</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('laporan-kerusakan.index') }}"
+                                class="nav-link {{ request()->routeIs('laporan-kerusakan.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-exclamation-triangle"></i>
+                                <p>Lapor Kerusakan</p>
+                            </a>
+                        </li>
 
                         @hasanyrole('Super Admin|Petugas Sarpras')
                         <li class="nav-item">

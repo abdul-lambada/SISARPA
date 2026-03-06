@@ -129,6 +129,80 @@
                 </div>
             </div>
         </div>
+
+        <!-- Laporan Kerusakan Masuk -->
+        <div class="col-md-6">
+            <div class="card card-outline card-warning">
+                <div class="card-header">
+                    <h3 class="card-title text-bold text-warning"><i class="fas fa-bullhorn mr-1"></i> Laporan Kerusakan (Pending)</h3>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-sm">
+                        <thead class="bg-light">
+                            <tr>
+                                <th>Barang</th>
+                                <th>Pelapor</th>
+                                <th>Kerusakan</th>
+                                <th width="50px">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($laporan_pending as $lp)
+                            <tr>
+                                <td>{{ $lp->barang->nama_barang }}</td>
+                                <td>{{ $lp->user->name }}</td>
+                                <td><small>{{ Str::limit($lp->deskripsi_kerusakan, 30) }}</small></td>
+                                <td><a href="{{ route('laporan-kerusakan.index') }}" class="btn btn-xs btn-warning">Cek</a></td>
+                            </tr>
+                            @empty
+                            <tr><td colspan="4" class="text-center py-3 text-muted">Belum ada laporan kerusakan baru.</td></tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Stok BHP Kritis -->
+        <div class="col-md-12">
+            <div class="card card-outline card-warning">
+                <div class="card-header">
+                    <h3 class="card-title text-bold text-warning"><i class="fas fa-exclamation-circle mr-1"></i> Stok BHP Kritis (Segera Pengadaan)</h3>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-sm m-0">
+                            <thead class="bg-light">
+                                <tr>
+                                    <th>Kode</th>
+                                    <th>Nama Barang</th>
+                                    <th>Sisa Stok</th>
+                                    <th>Min. Stok</th>
+                                    <th>Lokasi</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse($bhp_kritis as $bhp)
+                                <tr>
+                                    <td><code>{{ $bhp->kode_barang }}</code></td>
+                                    <td>{{ $bhp->nama_barang }}</td>
+                                    <td><span class="badge badge-danger">{{ $bhp->stok }} {{ $bhp->satuan }}</span></td>
+                                    <td>{{ $bhp->min_stok }}</td>
+                                    <td>{{ $bhp->lokasi }}</td>
+                                    <td><a href="{{ route('barang.edit', $bhp->id) }}" class="btn btn-xs btn-warning">Update Stok</a></td>
+                                </tr>
+                                @empty
+                                <tr><td colspan="6" class="text-center py-3 text-muted">Stok BHP aman terkendali.</td></tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     @endhasanyrole
 

@@ -31,6 +31,7 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('kategori/force-delete/{id}', [KategoriController::class, 'forceDelete'])->name('kategori.force-delete');
         Route::resource('kategori', KategoriController::class);
 
+        Route::get('barang/print-labels', [BarangController::class, 'printLabels'])->name('barang.print-labels');
         Route::get('barang/export', [BarangController::class, 'export'])->name('barang.export');
         Route::resource('barang', BarangController::class);
         
@@ -55,4 +56,6 @@ Route::middleware(['auth'])->group(function () {
     // All Auth Users
     Route::resource('peminjaman', PeminjamanController::class);
     Route::resource('reservasi', ReservasiController::class)->only(['index', 'create', 'store', 'destroy']);
+    Route::resource('laporan-kerusakan', \App\Http\Controllers\LaporanKerusakanController::class);
+    Route::post('laporan-kerusakan/update-status/{id}', [\App\Http\Controllers\LaporanKerusakanController::class, 'updateStatus'])->name('laporan-kerusakan.update-status');
 });
