@@ -17,7 +17,8 @@ class Peminjaman extends Model
         'tanggal_pinjam',
         'tanggal_kembali',
         'status',
-        'catatan'
+        'catatan',
+        'tanda_tangan'
     ];
 
     public function barang()

@@ -51,6 +51,6 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // All Auth Users
-    Route::resource('peminjaman', PeminjamanController::class)->only(['index', 'create', 'store', 'destroy']);
+    Route::resource('peminjaman', PeminjamanController::class);
     Route::resource('reservasi', ReservasiController::class)->only(['index', 'create', 'store', 'destroy']);
 });

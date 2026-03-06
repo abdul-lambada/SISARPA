@@ -7,7 +7,7 @@
     <div class="row">
         <div class="col-md-7">
             <div class="card card-primary">
-                <form action="{{ route('peminjaman.store') }}" method="POST">
+                <form action="{{ route('peminjaman.store') }}" method="POST" id="peminjamanForm">
                     @csrf
                     <div class="card-body">
                         <div class="form-group">
@@ -54,12 +54,29 @@
 
                         <div class="form-group">
                             <label for="catatan">Catatan</label>
-                            <textarea name="catatan" class="form-control" id="catatan" rows="3"
+                            <textarea name="catatan" class="form-control" id="catatan" rows="2"
                                 placeholder="Contoh: Digunakan untuk presentasi di aula">{{ old('catatan') }}</textarea>
+                        </div>
+
+                        <!-- DIGITAL SIGNATURE SECTION -->
+                        <div class="form-group mt-4">
+                            <label>Tanda Tangan Peminjam (Wajib)</label>
+                            <div class="signature-wrapper mb-2" style="border: 2px dashed #ccc; background: #fff; border-radius: 8px;">
+                                <canvas id="signature-pad" class="signature-pad" width="400" height="200" style="width: 100%; cursor: crosshair;"></canvas>
+                            </div>
+                            <button type="button" class="btn btn-outline-danger btn-sm" id="clear-signature">
+                                <i class="fas fa-eraser"></i> Hapus Tanda Tangan
+                            </button>
+                            <input type="hidden" name="tanda_tangan" id="tanda_tangan_data">
+                            @error('tanda_tangan')
+                                <div class="text-danger small mt-1">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-primary btn-block text-bold">PROSES PEMINJAMAN</button>
+                        <button type="submit" class="btn btn-primary btn-block text-bold py-2">
+                             <i class="fas fa-check-circle mr-1"></i> PROSES PEMINJAMAN
+                        </button>
                     </div>
                 </form>
             </div>
@@ -78,18 +95,62 @@
                     <small class="text-muted">Arahkan kamera ke QR Code pada barang untuk otomatis memilih barang.</small>
                 </div>
             </div>
+            
+            <div class="alert alert-info border-0 shadow-sm mt-3">
+                <h5><i class="icon fas fa-info"></i> Perhatian</h5>
+                Tanda tangan digital diperlukan sebagai bukti serah terima barang yang sah secara administratif di SMK.
+            </div>
         </div>
     </div>
 @endsection
 
 @push('js')
+    <!-- GSAP for smooth interactions (optional but nice) -->
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
     <script src="https://unpkg.com/html5-qrcode"></script>
     <script>
-        function onScanSuccess(decodedText, decodedResult) {
-            // decodedText is the barcode/qrcode content (kode_barang)
-            $("#result").text("Scan Berhasil: " + decodedText);
+        // SIGNATURE PAD LOGIC
+        const canvas = document.getElementById('signature-pad');
+        const signaturePad = new SignaturePad(canvas, {
+            backgroundColor: 'rgb(255, 255, 255)'
+        });
 
-            // Find option with that text and select it
+        // Responsive handling for canvas
+        function resizeCanvas() {
+            const ratio =  Math.max(window.devicePixelRatio || 1, 1);
+            canvas.width = canvas.offsetWidth * ratio;
+            canvas.height = canvas.offsetHeight * ratio;
+            canvas.getContext("2d").scale(ratio, ratio);
+            signaturePad.clear();
+        }
+
+        window.onresize = resizeCanvas;
+        resizeCanvas();
+
+        $('#clear-signature').on('click', function() {
+            signaturePad.clear();
+        });
+
+        $('#peminjamanForm').on('submit', function(e) {
+            if (signaturePad.isEmpty()) {
+                e.preventDefault();
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Tanda Tangan Kosong',
+                    text: 'Silahkan isi tanda tangan peminjam terlebih dahulu.',
+                });
+                return false;
+            }
+            
+            // Save signature as base64 to hidden input
+            const dataUrl = signaturePad.toDataURL();
+            $('#tanda_tangan_data').val(dataUrl);
+            return true;
+        });
+
+        // QR CODE SCANNER LOGIC
+        function onScanSuccess(decodedText, decodedResult) {
+            $("#result").text("Scan Berhasil: " + decodedText);
             let found = false;
             $('#barang_id option').each(function () {
                 if ($(this).text().indexOf(decodedText) !== -1) {

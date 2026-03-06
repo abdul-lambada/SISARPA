@@ -31,9 +31,10 @@ class PeminjamanController extends Controller
                     return $row->user->name;
                 })
                 ->addColumn('action', function ($row) {
-                    $btn = '';
+                    $btn = '<a href="' . route('peminjaman.show', $row->id) . '" class="btn btn-info btn-sm"><i class="fas fa-file-invoice"></i> Bukti</a> ';
+                    
                     if ($row->status == 'dipinjam' && auth()->user()->hasAnyRole(['Super Admin', 'Petugas Sarpras'])) {
-                        $btn .= '<button type="button" onclick="kembalikanBarang(' . $row->id . ')" class="btn btn-success btn-sm"><i class="fas fa-undo"></i> Kembalikan</button> ';
+                        $btn .= '<button type="button" onclick="kembalikanBarang(' . $row->id . ')" class="btn btn-success btn-sm"><i class="fas fa-undo"></i></button> ';
                     }
 
                     if (auth()->user()->hasAnyRole(['Super Admin', 'Petugas Sarpras'])) {
@@ -46,6 +47,11 @@ class PeminjamanController extends Controller
                 ->make(true);
         }
         return view('peminjaman.index');
+    }
+
+    public function show(Peminjaman $peminjaman)
+    {
+        return view('peminjaman.show', compact('peminjaman'));
     }
 
     public function create()
@@ -78,6 +84,7 @@ class PeminjamanController extends Controller
             'tanggal_pinjam' => $request->tanggal_pinjam,
             'status' => 'dipinjam',
             'catatan' => $request->catatan,
+            'tanda_tangan' => $request->tanda_tangan,
         ]);
 
         $barang->decrement('stok');
