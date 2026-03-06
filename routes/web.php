@@ -10,6 +10,7 @@ use App\Http\Controllers\PenggunaanBhpController;
 use App\Http\Controllers\StockOpnameController;
 use App\Http\Controllers\RuanganController;
 use App\Http\Controllers\ReservasiController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
@@ -42,6 +43,9 @@ Route::middleware(['auth'])->group(function () {
 
         Route::resource('ruangan', RuanganController::class);
         Route::post('reservasi/update-status/{id}', [ReservasiController::class, 'updateStatus'])->name('reservasi.update-status');
+
+        Route::post('users/import', [UserController::class, 'import'])->name('users.import');
+        Route::resource('users', UserController::class);
 
         Route::post('peminjaman/kembalikan/{id}', [PeminjamanController::class, 'kembalikan'])->name('peminjaman.kembalikan');
     });
