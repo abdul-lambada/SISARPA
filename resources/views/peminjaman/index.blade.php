@@ -40,7 +40,7 @@
                 serverSide: true,
                 ajax: "{{ route('peminjaman.index') }}",
                 columns: [
-                    { data: 'DT_RowIndex', name: 'DT_RowIndex' },
+                    { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
                     { data: 'nama_barang', name: 'nama_barang' },
                     { data: 'nama_peminjam', name: 'nama_peminjam' },
                     { data: 'tanggal_pinjam', name: 'tanggal_pinjam' },
@@ -63,20 +63,36 @@
         function kembalikanBarang(id) {
             Swal.fire({
                 title: 'Konfirmasi Pengembalian',
-                text: "Apakah barang sudah dikembalikan dalam kondisi baik?",
+                text: "Bagaimana kondisi barang saat dikembalikan?",
                 icon: 'question',
+                input: 'select',
+                inputOptions: {
+                    'baik': 'Kondisi Baik',
+                    'rusak': 'Kondisi Rusak'
+                },
+                inputPlaceholder: 'Pilih Kondisi',
                 showCancelButton: true,
                 confirmButtonColor: '#28a745',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Ya, sudah kembali!',
-                cancelButtonText: 'Batal'
+                confirmButtonText: 'Proses Kembali',
+                cancelButtonText: 'Batal',
+                inputValidator: (value) => {
+                    return new Promise((resolve) => {
+                        if (value) {
+                            resolve()
+                        } else {
+                            resolve('Anda harus memilih kondisi barang!')
+                        }
+                    })
+                }
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
                         url: "{{ url('peminjaman/kembalikan') }}/" + id,
                         type: "POST",
                         data: {
-                            _token: "{{ csrf_token() }}"
+                            _token: "{{ csrf_token() }}",
+                            kondisi: result.value
                         },
                         success: function (response) {
                             Swal.fire('Berhasil!', response.success, 'success');

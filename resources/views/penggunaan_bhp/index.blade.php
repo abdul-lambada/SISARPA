@@ -40,7 +40,7 @@
                 serverSide: true,
                 ajax: "{{ route('penggunaan-bhp.index') }}",
                 columns: [
-                    { data: 'DT_RowIndex', name: 'DT_RowIndex' },
+                    { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
                     { data: 'tanggal', name: 'tanggal' },
                     { data: 'nama_barang', name: 'nama_barang' },
                     { data: 'jumlah', name: 'jumlah' },

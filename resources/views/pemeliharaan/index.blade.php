@@ -39,7 +39,7 @@
                 serverSide: true,
                 ajax: "{{ route('pemeliharaan.index') }}",
                 columns: [
-                    { data: 'DT_RowIndex', name: 'DT_RowIndex' },
+                    { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
                     { data: 'nama_barang', name: 'nama_barang' },
                     { data: 'tanggal_servis', name: 'tanggal_servis' },
                     { data: 'biaya_format', name: 'biaya_format' },

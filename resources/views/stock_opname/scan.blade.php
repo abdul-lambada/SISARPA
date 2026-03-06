@@ -13,9 +13,18 @@
                 <div class="card-body">
                     <div id="reader" style="width: 100%;"></div>
                     <div class="mt-3">
+                        <div class="form-group">
+                            <label>Jumlah Input (Khusus BHP)</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-layer-group"></i></span>
+                                </div>
+                                <input type="number" id="manual-qty" class="form-control" value="1" min="1">
+                            </div>
+                            <small class="text-muted">Biarkan "1" untuk scan aset satu per satu.</small>
+                        </div>
                         <div class="alert alert-info">
-                            <i class="fas fa-info-circle"></i> Scan QR Code pada barang untuk memverifikasi keberadaan
-                            fisik.
+                            <i class="fas fa-info-circle"></i> Scan QR Code pada barang untuk memverifikasi keberadaan fisik.
                         </div>
                     </div>
                 </div>
@@ -80,7 +89,8 @@
                 type: "POST",
                 data: {
                     _token: "{{ csrf_token() }}",
-                    kode_barang: decodedText
+                    kode_barang: decodedText,
+                    jumlah: $('#manual-qty').val()
                 },
                 success: function (response) {
                     if (response.success) {

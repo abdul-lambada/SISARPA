@@ -20,7 +20,7 @@ class PeminjamanController extends Controller
                 $query->where('user_id', auth()->id());
             }
 
-            $data = $query->latest()->get();
+            $data = $query->latest();
 
             return DataTables::of($data)
                 ->addIndexColumn()
@@ -102,10 +102,17 @@ class PeminjamanController extends Controller
 
         $peminjaman->update([
             'tanggal_kembali' => now(),
-            'status' => 'dikembalikan'
+            'status' => 'dikembalikan',
+            'kondisi_kembali' => $request->kondisi // 'baik' or 'rusak'
         ]);
 
-        $peminjaman->barang->increment('stok');
+        $barang = $peminjaman->barang;
+        $barang->increment('stok');
+        
+        // Jika dikembalikan dalam kondisi rusak, ubah status barang
+        if ($request->kondisi == 'rusak') {
+            $barang->update(['kondisi' => 'rusak']);
+        }
 
         return response()->json(['success' => 'Barang berhasil dikembalikan.']);
     }

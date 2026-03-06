@@ -16,7 +16,7 @@ class BarangController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Barang::with('kategori')->latest()->get();
+            $data = Barang::with('kategori')->latest();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('nama_kategori', function ($row) {

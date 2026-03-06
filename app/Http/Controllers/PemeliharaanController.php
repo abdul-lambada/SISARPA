@@ -12,7 +12,7 @@ class PemeliharaanController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Pemeliharaan::with('barang')->latest()->get();
+            $data = Pemeliharaan::with('barang')->latest();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('nama_barang', function ($row) {

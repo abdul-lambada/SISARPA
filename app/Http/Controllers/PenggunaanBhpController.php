@@ -13,7 +13,7 @@ class PenggunaanBhpController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = PenggunaanBhp::with(['barang', 'user'])->latest()->get();
+            $data = PenggunaanBhp::with(['barang', 'user'])->latest();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('nama_barang', function ($row) {

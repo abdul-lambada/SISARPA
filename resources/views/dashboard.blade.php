@@ -51,7 +51,7 @@
             <div class="small-box bg-success">
                 <div class="inner">
                     <h3>{{ $stok_menipis }}</h3>
-                    <p>Stok < 5 Unit</p>
+                    <p>Stok Menipis (< 5)</p>
                 </div>
                 <div class="icon">
                     <i class="fas fa-chart-line"></i>
@@ -61,6 +61,76 @@
             </div>
         </div>
     </div>
+
+    @hasanyrole('Super Admin|Petugas Sarpras')
+    <div class="row">
+        <!-- Reservasi Menunggu Persetujuan -->
+        <div class="col-md-6">
+            <div class="card card-outline card-primary">
+                <div class="card-header">
+                    <h3 class="card-title text-bold text-primary"><i class="fas fa-calendar-check mr-1"></i> Reservasi Menunggu Persetujuan</h3>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-sm">
+                        <thead class="bg-light">
+                            <tr>
+                                <th>Peminjam</th>
+                                <th>Ruangan</th>
+                                <th>Jadwal</th>
+                                <th width="50px">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($reservasi_pending as $res)
+                            <tr>
+                                <td>{{ $res->user->name }}</td>
+                                <td>{{ $res->ruangan->nama_ruangan }}</td>
+                                <td class="small">{{ $res->tanggal }}<br>({{ substr($res->jam_mulai,0,5) }} - {{ substr($res->jam_selesai,0,5) }})</td>
+                                <td><a href="{{ route('reservasi.index') }}" class="btn btn-xs btn-primary">Detail</a></td>
+                            </tr>
+                            @empty
+                            <tr><td colspan="4" class="text-center py-3 text-muted">Tidak ada permintaan pending.</td></tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Peminjaman Jatuh Tempo (> 3 Hari) -->
+        <div class="col-md-6">
+            <div class="card card-outline card-danger">
+                <div class="card-header">
+                    <h3 class="card-title text-bold text-danger"><i class="fas fa-clock mr-1"></i> Pinjaman Belum Kembali (> 3 Hari)</h3>
+                </div>
+                <div class="card-body p-0">
+                    <table class="table table-sm">
+                        <thead class="bg-light">
+                            <tr>
+                                <th>Barang</th>
+                                <th>Peminjam</th>
+                                <th>Tgl Pinjam</th>
+                                <th width="50px">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($jatuh_tempo as $jt)
+                            <tr class="table-danger">
+                                <td>{{ $jt->barang->nama_barang }}</td>
+                                <td>{{ $jt->user->name }}</td>
+                                <td>{{ \Carbon\Carbon::parse($jt->tanggal_pinjam)->diffForHumans() }}</td>
+                                <td><a href="{{ route('peminjaman.index') }}" class="btn btn-xs btn-danger">Nagih</a></td>
+                            </tr>
+                            @empty
+                            <tr><td colspan="4" class="text-center py-3 text-muted">Semua pinjaman masih dalam batas waktu.</td></tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endhasanyrole
 
     <div class="row">
         <div class="col-md-12">

@@ -40,7 +40,7 @@
                 serverSide: true,
                 ajax: "{{ route('reservasi.index') }}",
                 columns: [
-                    { data: 'DT_RowIndex', name: 'DT_RowIndex' },
+                    { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
                     { data: 'nama_user', name: 'user.name' },
                     { data: 'nama_ruangan', name: 'ruangan.nama_ruangan' },
                     { data: 'waktu', name: 'tanggal' },

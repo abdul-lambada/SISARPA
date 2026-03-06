@@ -14,7 +14,7 @@ class StockOpnameController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = StockOpname::with('user')->latest()->get();
+            $data = StockOpname::with('user')->latest();
             return DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -81,6 +81,7 @@ class StockOpnameController extends Controller
     {
         $request->validate([
             'kode_barang' => 'required|exists:barang,kode_barang',
+            'jumlah' => 'nullable|integer|min:1'
         ]);
 
         $opname = StockOpname::findOrFail($id);
@@ -95,13 +96,14 @@ class StockOpnameController extends Controller
             return response()->json(['success' => false, 'message' => 'Barang ini bukan dari ruangan ' . $opname->ruangan]);
         }
 
-        $detail->increment('jumlah_fisik');
+        $increment = $request->jumlah ?? 1;
+        $detail->increment('jumlah_fisik', $increment);
         $detail->selisih = $detail->jumlah_fisik - $detail->jumlah_sistem;
         $detail->save();
 
         return response()->json([
             'success' => true,
-            'message' => 'Berhasil scan: ' . $barang->nama_barang,
+            'message' => 'Berhasil scan (' . $increment . ' unit): ' . $barang->nama_barang,
             'data' => [
                 'nama' => $barang->nama_barang,
                 'fisik' => $detail->jumlah_fisik,

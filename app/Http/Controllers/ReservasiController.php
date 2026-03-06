@@ -20,7 +20,7 @@ class ReservasiController extends Controller
                 $query->where('user_id', Auth::id());
             }
 
-            return DataTables::of($query->get())
+            return DataTables::of($query)
                 ->addIndexColumn()
                 ->addColumn('nama_user', function ($row) {
                     return $row->user->name;

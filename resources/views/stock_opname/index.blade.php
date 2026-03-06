@@ -39,7 +39,7 @@
                 serverSide: true,
                 ajax: "{{ route('stock-opname.index') }}",
                 columns: [
-                    { data: 'DT_RowIndex', name: 'DT_RowIndex' },
+                    { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
                     { data: 'tanggal', name: 'tanggal' },
                     { data: 'ruangan', name: 'ruangan' },
                     { data: 'user.name', name: 'user.name' },

@@ -39,7 +39,7 @@
                 serverSide: true,
                 ajax: "{{ route('ruangan.index') }}",
                 columns: [
-                    { data: 'DT_RowIndex', name: 'DT_RowIndex' },
+                    { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
                     { data: 'kode_ruangan', name: 'kode_ruangan' },
                     { data: 'nama_ruangan', name: 'nama_ruangan' },
                     { data: 'kapasitas', name: 'kapasitas', render: function (data) { return data + ' Orang'; } },
