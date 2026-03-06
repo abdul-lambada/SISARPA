@@ -20,9 +20,9 @@
 </head>
 <body>
     <div class="header">
-        <h2>PEMERINTAH KOTA ADMINISTRASI SEKOLAH</h2>
-        <h2>SMK NEGERI CONTOH SISARPA</h2>
-        <p>Jl. Pendidikan No. 123, Telp: (021) 1234567, Website: www.sisarpa.sch.id</p>
+        <h2>{{ strtoupper(\App\Models\Setting::get('school_city')) }}</h2>
+        <h2>{{ strtoupper(\App\Models\Setting::get('school_name')) }}</h2>
+        <p>{{ \App\Models\Setting::get('school_address') }}, Website: {{ \App\Models\Setting::get('school_website') }}</p>
     </div>
 
     <div class="title">BERITA ACARA SERAH TERIMA BARANG (BAST)</div>

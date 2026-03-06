@@ -53,7 +53,7 @@
                 <div class="qr-code">
                     <img src="data:image/png;base64, {!! base64_encode(\SimpleSoftwareIO\QrCode\Facades\QrCode::format('png')->size(80)->generate($barang->kode_barang)) !!} ">
                 </div>
-                <div class="footer-label">SISARPA - Inventaris Sekolah</div>
+                <div class="footer-label">{{ \App\Models\Setting::get('school_name') }}</div>
             </td>
             @endforeach
             @if($chunk->count() < 3)

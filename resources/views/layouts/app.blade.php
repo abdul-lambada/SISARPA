@@ -130,6 +130,13 @@
                                 <p>Log Aktivitas</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('settings.index') }}"
+                                class="nav-link {{ request()->routeIs('settings.index') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-cogs"></i>
+                                <p>Pengaturan Sistem</p>
+                            </a>
+                        </li>
                         @endhasanyrole
 
                         <li class="nav-header">TRANSAKSI</li>

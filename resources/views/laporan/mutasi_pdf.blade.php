@@ -17,7 +17,7 @@
 <body>
     <div class="header">
         <h3>REKAPITULASI MUTASI BARANG INVENTARIS</h3>
-        <h3>SMK NEGERI CONTOH SISARPA</h3>
+        <h3>{{ strtoupper(\App\Models\Setting::get('school_name')) }}</h3>
         <p>LAPORAN TAHUN ANGGARAN: {{ $year }}</p>
     </div>
 
