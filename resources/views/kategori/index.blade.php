@@ -36,7 +36,7 @@
                 serverSide: true,
                 ajax: "{{ route('kategori.index') }}",
                 columns: [
-                    { data: 'DT_RowIndex', name: 'DT_RowIndex' },
+                    { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false },
                     { data: 'nama_kategori', name: 'nama_kategori' },
                     { data: 'action', name: 'action', orderable: false, searchable: false },
                 ]
