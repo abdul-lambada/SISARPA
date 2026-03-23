@@ -24,6 +24,7 @@ class User extends Authenticatable
         'username',
         'no_induk',
         'email',
+        'no_hp',
         'password',
         'jenis_user',
         'kelas',

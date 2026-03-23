@@ -9,8 +9,36 @@ use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Auth;
 
+use App\Services\WhatsAppService;
+
 class PeminjamanController extends Controller
 {
+    public function sendWaReminder($id)
+    {
+        $peminjaman = Peminjaman::with(['barang', 'user'])->findOrFail($id);
+        $user = $peminjaman->user;
+        
+        if (empty($user->no_hp)) {
+            return response()->json(['error' => 'Nomor HP user tidak ditemukan.'], 400);
+        }
+
+        $message = "*[PENGINGAT PENGEMBALIAN BARANG]*\n\n" .
+                   "Halo " . $user->name . ",\n" .
+                   "Mohon segera mengembalikan barang berikut:\n" .
+                   "Nama Barang: *" . $peminjaman->barang->nama_barang . "*\n" .
+                   "Tanggal Pinjam: " . $peminjaman->tanggal_pinjam . "\n\n" .
+                   "Terima kasih.\n" .
+                   "-- Sistem Inventaris SISARPA --";
+
+        $response = WhatsAppService::sendMessage($user->no_hp, $message);
+
+        if (isset($response['status']) && $response['status'] == true) {
+            return response()->json(['success' => 'Pengingat WhatsApp berhasil dikirim ke ' . $user->no_hp]);
+        }
+
+        return response()->json(['error' => 'Gagal mengirim WA: ' . ($response['reason'] ?? 'Cek API Key')], 500);
+    }
+
     public function index(Request $request)
     {
         if ($request->ajax()) {
@@ -35,7 +63,8 @@ class PeminjamanController extends Controller
                     $btn .= '<a href="' . route('peminjaman.print-bast', $row->id) . '" target="_blank" class="btn btn-dark btn-sm" title="Cetak BAST PDF"><i class="fas fa-print"></i></a> ';
                     
                     if ($row->status == 'dipinjam' && auth()->user()->hasAnyRole(['Super Admin', 'Petugas Sarpras'])) {
-                        $btn .= '<button type="button" onclick="kembalikanBarang(' . $row->id . ')" class="btn btn-success btn-sm"><i class="fas fa-undo"></i></button> ';
+                        $btn .= '<button type="button" onclick="kembalikanBarang(' . $row->id . ')" class="btn btn-success btn-sm" title="Kembalikan"><i class="fas fa-undo"></i></button> ';
+                        $btn .= '<button type="button" onclick="sendWa(' . $row->id . ')" class="btn btn-success btn-sm" style="background-color: #25D366; border-color: #25D366;" title="Kirim Pengingat WA"><i class="fab fa-whatsapp"></i></button> ';
                     }
 
                     if (auth()->user()->hasAnyRole(['Super Admin', 'Petugas Sarpras'])) {

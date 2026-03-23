@@ -62,6 +62,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('activity-logs/{id}', [\App\Http\Controllers\ActivityLogController::class, 'show'])->name('activity-logs.show');
         
         Route::post('peminjaman/kembalikan/{id}', [PeminjamanController::class, 'kembalikan'])->name('peminjaman.kembalikan');
+        Route::post('peminjaman/send-wa/{id}', [PeminjamanController::class, 'sendWaReminder'])->name('peminjaman.send-wa');
         Route::get('peminjaman/print-bast/{peminjaman}', [PeminjamanController::class, 'printBast'])->name('peminjaman.print-bast');
     });
 

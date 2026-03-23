@@ -296,4 +296,110 @@
             </div>
         </div>
     </div>
+
+    @hasanyrole('Super Admin|Kepala Sekolah')
+    <div class="row mt-4">
+        <div class="col-12">
+            <h4 class="mb-3 text-bold"><i class="fas fa-chart-line mr-2"></i> ANALISIS BIAYA (KEPALA SEKOLAH)</h4>
+        </div>
+        <!-- Grafik Biaya Pemeliharaan -->
+        <div class="col-md-8">
+            <div class="card card-outline card-success shadow-sm">
+                <div class="card-header">
+                    <h3 class="card-title text-bold text-success"><i class="fas fa-chart-bar mr-1"></i> Tren Biaya Pemeliharaan (6 Bulan Terakhir)</h3>
+                </div>
+                <div class="card-body">
+                    <div class="chart">
+                        <canvas id="maintenanceChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rincian Biaya Per Ruangan (Bulan Ini) -->
+        <div class="col-md-4">
+            <div class="card card-outline card-primary shadow-sm">
+                <div class="card-header">
+                    <h3 class="card-title text-bold text-primary"><i class="fas fa-wallet mr-1"></i> Rincian Biaya Per Ruangan ({{ now()->translatedFormat('F') }})</h3>
+                </div>
+                <div class="card-body p-0">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item bg-light text-center py-4">
+                            <span class="text-xs text-muted d-block font-weight-bold">TOTAL PENGELUARAN BULAN INI</span>
+                            <h2 class="text-bold text-success mb-0 mt-1">Rp {{ number_format($total_biaya_bulan_ini, 0, ',', '.') }}</h2>
+                        </li>
+                        @forelse($maintenance_by_location as $loc)
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <span class="d-block text-bold text-sm">{{ $loc->lokasi }}</span>
+                                <small class="text-muted">{{ $loc->total_perbaikan }}x Perbaikan</small>
+                            </div>
+                            <span class="text-bold text-primary">Rp {{ number_format($loc->total_biaya, 0, ',', '.') }}</span>
+                        </li>
+                        @empty
+                        <li class="list-group-item text-center text-muted py-3 small italic">Belum ada data pengeluaran bulan ini.</li>
+                        @endforelse
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endhasanyrole
+
 @endsection
+
+@push('js')
+    <!-- ChartJS -->
+    <script src="{{ asset('adminlte/plugins/chart.js/Chart.min.js') }}"></script>
+    <script>
+        $(function () {
+            // Chart Data for Maintenance Cost
+            var areaChartData = {
+                labels  : {!! json_encode($maintenance_monthly->pluck('month')) !!},
+                datasets: [
+                    {
+                    label               : 'Biaya Pemeliharaan (Rp)',
+                    backgroundColor     : 'rgba(40, 167, 69, 0.9)',
+                    borderColor         : 'rgba(40, 167, 69, 1)',
+                    data                : {!! json_encode($maintenance_monthly->pluck('total')) !!}
+                    }
+                ]
+            }
+
+            var barChartCanvas = $('#maintenanceChart').get(0).getContext('2d')
+            var barChartData = $.extend(true, {}, areaChartData)
+
+            var barChartOptions = {
+                responsive              : true,
+                maintainAspectRatio     : false,
+                datasetFill             : false,
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            callback: function(value, index, values) {
+                                if (value >= 1000) {
+                                    return 'Rp ' + value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                                }
+                                return 'Rp ' + value;
+                            }
+                        }
+                    }]
+                },
+                tooltips: {
+                    callbacks: {
+                        label: function(tooltipItem, data) {
+                            return 'Rp ' + tooltipItem.yLabel.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                        }
+                    }
+                }
+            }
+
+            new Chart(barChartCanvas, {
+                type: 'bar',
+                data: barChartData,
+                options: barChartOptions
+            })
+        });
+    </script>
+@endpush

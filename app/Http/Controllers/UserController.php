@@ -49,6 +49,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'username' => 'required|string|unique:users,username',
             'email' => 'required|string|email|unique:users,email',
+            'no_hp' => 'nullable|string|max:20',
             'password' => 'required|string|min:8',
             'role' => 'required'
         ]);
@@ -80,6 +81,7 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'username' => 'required|string|unique:users,username,'.$user->id,
             'email' => 'required|string|email|unique:users,email,'.$user->id,
+            'no_hp' => 'nullable|string|max:20',
             'role' => 'required'
         ]);
 
@@ -88,6 +90,7 @@ class UserController extends Controller
             'username' => $request->username,
             'no_induk' => $request->no_induk,
             'email' => $request->email,
+            'no_hp' => $request->no_hp,
             'jenis_user' => $request->jenis_user,
             'kelas' => $request->kelas,
         ];

@@ -105,5 +105,41 @@
                 }
             })
         }
+
+        function sendWa(id) {
+            Swal.fire({
+                title: 'Kirim Pengingat?',
+                text: "Sistem akan mengirimkan pesan WhatsApp ke peminjam.",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#25D366',
+                cancelButtonColor: '#d33',
+                confirmButtonText: '<i class="fab fa-whatsapp"></i> Ya, Kirim!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Mengirim...',
+                        allowOutsideClick: false,
+                        didOpen: () => {
+                            Swal.showLoading()
+                        }
+                    });
+                    $.ajax({
+                        url: "{{ url('peminjaman/send-wa') }}/" + id,
+                        type: "POST",
+                        data: {
+                            _token: "{{ csrf_token() }}"
+                        },
+                        success: function (response) {
+                            Swal.fire('Terkirim!', response.success, 'success');
+                        },
+                        error: function (xhr) {
+                            Swal.fire('Gagal!', xhr.responseJSON.error, 'error');
+                        }
+                    });
+                }
+            })
+        }
     </script>
 @endpush

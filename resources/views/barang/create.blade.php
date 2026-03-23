@@ -66,7 +66,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="satuan">Satuan</label>
                                     <input type="text" name="satuan" class="form-control @error('satuan') is-invalid @enderror"
@@ -76,7 +76,7 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="merk">Merk</label>
                                     <input type="text" name="merk" class="form-control @error('merk') is-invalid @enderror"
@@ -86,13 +86,27 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="form-group">
-                                    <label for="lokasi">Lokasi/Ruangan</label>
-                                    <input type="text" name="lokasi"
-                                        class="form-control @error('lokasi') is-invalid @enderror" id="lokasi"
-                                        placeholder="Contoh: Lab Komputer 1 / Gudang" value="{{ old('lokasi') }}">
-                                    @error('lokasi')
+                                    <label for="sumber_dana">Sumber Dana</label>
+                                    <select name="sumber_dana" id="sumber_dana" class="form-control @error('sumber_dana') is-invalid @enderror">
+                                        <option value="">-- Pilih --</option>
+                                        <option value="BOS" {{ old('sumber_dana') == 'BOS' ? 'selected' : '' }}>Dana BOS</option>
+                                        <option value="BOSDA" {{ old('sumber_dana') == 'BOSDA' ? 'selected' : '' }}>Dana BOSDA</option>
+                                        <option value="KOMITE" {{ old('sumber_dana') == 'KOMITE' ? 'selected' : '' }}>KOMITE</option>
+                                        <option value="LAINNYA" {{ old('sumber_dana') == 'LAINNYA' ? 'selected' : '' }}>Lainnya</option>
+                                    </select>
+                                    @error('sumber_dana')
+                                        <span class="error invalid-feedback">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="harga_perolehan">Harga Perolehan (Rp)</label>
+                                    <input type="number" name="harga_perolehan" class="form-control @error('harga_perolehan') is-invalid @enderror"
+                                        id="harga_perolehan" placeholder="0" value="{{ old('harga_perolehan', 0) }}">
+                                    @error('harga_perolehan')
                                         <span class="error invalid-feedback">{{ $message }}</span>
                                     @enderror
                                 </div>
@@ -110,6 +124,17 @@
                         </div>
 
                         <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="lokasi">Lokasi/Ruangan</label>
+                                    <input type="text" name="lokasi"
+                                        class="form-control @error('lokasi') is-invalid @enderror" id="lokasi"
+                                        placeholder="Contoh: Lab Komputer 1 / Gudang" value="{{ old('lokasi') }}">
+                                    @error('lokasi')
+                                        <span class="error invalid-feedback">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div>
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label for="kondisi">Kondisi</label>

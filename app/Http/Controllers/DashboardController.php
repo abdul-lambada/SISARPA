@@ -9,6 +9,9 @@ use App\Models\Reservasi;
 use App\Models\LaporanKerusakan;
 use Illuminate\Http\Request;
 
+use App\Models\Pemeliharaan;
+use Illuminate\Support\Facades\DB;
+
 class DashboardController extends Controller
 {
     public function index()
@@ -18,6 +21,31 @@ class DashboardController extends Controller
         $data['sedang_dipinjam'] = Peminjaman::where('status', 'dipinjam')->count();
         $data['stok_menipis'] = Barang::where('stok', '<', 5)->count();
         $data['total_kategori'] = Kategori::count();
+
+        // Biaya Pemeliharaan 6 Bulan Terakhir (Grafik)
+        $data['maintenance_monthly'] = Pemeliharaan::select(
+            DB::raw('SUM(biaya) as total'),
+            DB::raw("DATE_FORMAT(tanggal_servis, '%M') as month"),
+            DB::raw("MONTH(tanggal_servis) as m_num")
+        )
+        ->where('tanggal_servis', '>=', now()->subMonths(6))
+        ->groupBy('month', 'm_num')
+        ->orderBy('m_num', 'asc')
+        ->get();
+
+        // Rincian Biaya per Ruangan (Bulan ini)
+        $data['maintenance_by_location'] = Pemeliharaan::join('barang', 'pemeliharaan.barang_id', '=', 'barang.id')
+            ->select(
+                'barang.lokasi',
+                DB::raw('SUM(pemeliharaan.biaya) as total_biaya'),
+                DB::raw('COUNT(pemeliharaan.id) as total_perbaikan')
+            )
+            ->whereMonth('pemeliharaan.tanggal_servis', now()->month)
+            ->groupBy('barang.lokasi')
+            ->orderBy('total_biaya', 'desc')
+            ->get();
+        
+        $data['total_biaya_bulan_ini'] = $data['maintenance_by_location']->sum('total_biaya');
 
         // Reservasi yang butuh persetujuan (khusus Admin)
         $data['reservasi_pending'] = Reservasi::with(['user', 'ruangan'])

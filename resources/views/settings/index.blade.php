@@ -131,24 +131,48 @@
         </div>
     </div>
 
-    <div class="col-md-4">
-        <div class="card card-info card-outline">
+        <div class="card card-success card-outline">
             <div class="card-header">
-                <h3 class="card-title text-bold"><i class="fas fa-info-circle mr-1"></i> Petunjuk</h3>
+                <h3 class="card-title text-bold"><i class="fab fa-whatsapp mr-1 text-success"></i> Konfigurasi WhatsApp (Notifikasi)</h3>
+            </div>
+            <form action="{{ route('settings.update') }}" method="POST">
+                @csrf
+                <div class="card-body">
+                    <div class="form-group">
+                        <label>WhatsApp API Key</label>
+                        <input type="password" name="whatsapp_api_key" class="form-control" value="{{ $settings['whatsapp_api_key'] ?? '' }}" placeholder="Masukkan API Key Anda">
+                        <small class="text-muted">Gunakan API Key dari penyedia layanan (Fonnte/Wauzi).</small>
+                    </div>
+                    <div class="form-group">
+                        <label>Provider Layanan</label>
+                        <select name="whatsapp_provider" class="form-control">
+                            <option value="fonnte" {{ ($settings['whatsapp_provider'] ?? '') == 'fonnte' ? 'selected' : '' }}>Fonnte (Rekomendasi)</option>
+                            <option value="generic" {{ ($settings['whatsapp_provider'] ?? '') == 'generic' ? 'selected' : '' }}>Generic API</option>
+                        </select>
+                    </div>
+                    <div class="alert alert-info py-2 px-3 small border-0 shadow-none mb-0">
+                        <i class="fas fa-info-circle mr-1"></i> API Key diperlukan agar sistem bisa mengirim pengingat otomatis ke peminjam.
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-success btn-block text-bold">SIMPAN WHATSAPP</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="card card-info card-outline shadow-sm">
+            <div class="card-header">
+                <h3 class="card-title text-bold"><i class="fas fa-info-circle mr-1"></i> Petunjuk Sistem</h3>
             </div>
             <div class="card-body">
-                <p>Data yang Anda masukkan di sini akan digunakan secara otomatis pada:</p>
-                <ul>
+                <p>Data yang Anda masukkan di sini secara otomatis digunakan pada:</p>
+                <ul class="pl-3">
                     <li><strong>KOP Surat</strong> Berita Acara (BAST).</li>
                     <li><strong>Label QR Code</strong> barang.</li>
-                    <li><strong>Laporan Mutasi</strong> tahunan.</li>
-                    <li>Halaman Login & Dashboard.</li>
+                    <li><strong>Laporan Mutasi</strong> & Dashboard.</li>
+                    <li><strong>Notifikasi WhatsApp</strong> (Jika aktif).</li>
                 </ul>
-                <div class="alert alert-warning small">
-                    <i class="fas fa-exclamation-triangle"></i> Perubahan data identitas akan langsung berpengaruh pada dokumen PDF yang dicetak.
-                </div>
             </div>
         </div>
-    </div>
 </div>
 @endsection

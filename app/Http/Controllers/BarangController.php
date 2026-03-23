@@ -63,6 +63,8 @@ class BarangController extends Controller
             'min_stok' => 'required|integer|min:0',
             'tgl_servis_berikutnya' => 'nullable|date',
             'foto_barang' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'sumber_dana' => 'required',
+            'harga_perolehan' => 'required|numeric|min:0',
         ]);
 
         $data = $request->all();
@@ -105,6 +107,8 @@ class BarangController extends Controller
             'min_stok' => 'required|integer|min:0',
             'tgl_servis_berikutnya' => 'nullable|date',
             'foto_barang' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'sumber_dana' => 'required',
+            'harga_perolehan' => 'required|numeric|min:0',
         ]);
 
         $data = $request->all();
