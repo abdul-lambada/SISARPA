@@ -113,9 +113,16 @@ class PeminjamanController extends Controller
             return back()->with('error', 'Stok barang habis.');
         }
 
+        $userId = $request->user_id;
+        
+        // Anti-Spoof: Jika bukan admin/petugas, paksa user_id ke diri sendiri
+        if (!auth()->user()->hasAnyRole(['Super Admin', 'Petugas Sarpras'])) {
+            $userId = auth()->id();
+        }
+
         Peminjaman::create([
             'barang_id' => $request->barang_id,
-            'user_id' => $request->user_id,
+            'user_id' => $userId,
             'tanggal_pinjam' => $request->tanggal_pinjam,
             'status' => 'dipinjam',
             'catatan' => $request->catatan,

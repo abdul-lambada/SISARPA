@@ -8,8 +8,13 @@ use Illuminate\Support\Facades\Request;
 
 class LogHelper
 {
-    public static function log($activity, $model = null, $properties = [])
+    public static function log($activity, $model = null, $new_data = [], $old_data = [])
     {
+        $properties = [
+            'new' => $new_data,
+            'old' => $old_data
+        ];
+
         ActivityLog::create([
             'user_id' => Auth::id(),
             'activity' => $activity,

@@ -14,21 +14,29 @@ class LaporanMutasiController extends Controller
     {
         $year = $request->year ?? date('Y');
         
-        // Dapatkan data mutasi barang
+        // Dapatkan data mutasi barang yang lebih akurat (Deep Audit Fix)
         $barangs = Barang::with('kategori')->get()->map(function($barang) use ($year) {
-            // Barang Masuk (berdasarkan created_at di tahun terpilih)
+            // Barang Masuk (dianggap stok saat ini jika baru ditambahkan tahun ini)
             $masuk = ($barang->created_at->year == $year) ? $barang->stok : 0; 
             
-            // Barang Keluar (BHP)
-            $keluar_bhp = PenggunaanBhp::where('barang_id', $barang->id)
+            // Barang Keluar (BHP) - Terintegrasi dengan PenggunaanBhp
+            $keluar_bhp = \App\Models\PenggunaanBhp::where('barang_id', $barang->id)
                 ->whereYear('tanggal', $year)
                 ->sum('jumlah');
                 
-            // Barang Rusak (Estimasi dari riwayat peminjaman yang kembali rusak di tahun ini)
-            $rusak = Peminjaman::where('barang_id', $barang->id)
+            // Barang Rusak (INTEGRASI: Peminjaman Rusak + Laporan Kerusakan yang Terkonfirmasi)
+            $rusak_peminjaman = \App\Models\Peminjaman::where('barang_id', $barang->id)
                 ->where('kondisi_kembali', 'rusak')
                 ->whereYear('tanggal_kembali', $year)
                 ->count();
+
+            $rusak_laporan = \App\Models\LaporanKerusakan::where('barang_id', $barang->id)
+                ->where('status', 'selesai')
+                ->where('deskripsi_kerusakan', 'like', '%total%') // Opsional: atau cek kondisi akhir
+                ->whereYear('updated_at', $year)
+                ->count();
+                
+            $total_rusak = $rusak_peminjaman + $rusak_laporan;
                 
             return [
                 'kode' => $barang->kode_barang,
@@ -37,7 +45,7 @@ class LaporanMutasiController extends Controller
                 'satuan' => $barang->satuan,
                 'masuk' => $masuk,
                 'keluar' => $keluar_bhp,
-                'rusak' => $rusak,
+                'rusak' => ($barang->stok == 0 && $barang->kondisi == 'rusak') ? $total_rusak + 1 : $total_rusak, // Pendekatan mendalam
                 'stok_akhir' => $barang->stok
             ];
         });

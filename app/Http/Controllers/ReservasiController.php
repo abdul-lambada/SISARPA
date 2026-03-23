@@ -125,6 +125,11 @@ class ReservasiController extends Controller
 
     public function destroy(Reservasi $reservasi)
     {
+        // Guard: Jika bukan pemilik & bukan admin/petugas -> Gagal
+        if ($reservasi->user_id != Auth::id() && !Auth::user()->hasAnyRole(['Super Admin', 'Petugas Sarpras'])) {
+            return back()->with('error', 'Anda tidak memiliki hak untuk membatalkan reservasi ini.');
+        }
+
         if ($reservasi->status != 'pending') {
             return back()->with('error', 'Hanya reservasi pending yang bisa dibatalkan.');
         }

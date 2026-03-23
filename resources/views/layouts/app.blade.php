@@ -87,7 +87,7 @@
                         </li>
 
                         @hasanyrole('Super Admin|Petugas Sarpras')
-                        <li class="nav-header">MANAJEMEN</li>
+                        <li class="nav-header">MASTER DATA</li>
                         <li class="nav-item">
                             <a href="{{ route('kategori.index') }}"
                                 class="nav-link {{ request()->routeIs('kategori.*') ? 'active' : '' }}">
@@ -110,54 +110,27 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ route('stock-opname.index') }}"
-                                class="nav-link {{ request()->routeIs('stock-opname.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-clipboard-check"></i>
-                                <p>Stock Opname</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a href="{{ route('users.index') }}"
                                 class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-users"></i>
                                 <p>Manajemen User</p>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="{{ route('settings.backup') }}" class="nav-link">
-                                <i class="nav-icon fas fa-database"></i>
-                                <p>Backup Database</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('activity-logs.index') }}"
-                                class="nav-link {{ request()->routeIs('activity-logs.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-history"></i>
-                                <p>Log Aktivitas</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('settings.index') }}"
-                                class="nav-link {{ request()->routeIs('settings.index') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-cogs"></i>
-                                <p>Pengaturan Sistem</p>
-                            </a>
-                        </li>
                         @endhasanyrole
 
-                        <li class="nav-header">TRANSAKSI</li>
+                        <li class="nav-header">LAYANAN & TRANSAKSI</li>
                         <li class="nav-item">
                             <a href="{{ route('peminjaman.index') }}"
                                 class="nav-link {{ request()->routeIs('peminjaman.*') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-hand-holding"></i>
-                                <p>Peminjaman (Aset)</p>
+                                <p>Peminjaman Aset</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('reservasi.index') }}"
                                 class="nav-link {{ request()->routeIs('reservasi.*') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-calendar-alt"></i>
-                                <p>Reservasi (Ruangan)</p>
+                                <p>Reservasi Ruangan</p>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -169,6 +142,14 @@
                         </li>
 
                         @hasanyrole('Super Admin|Petugas Sarpras')
+                        <li class="nav-header">MONITORING & LAPORAN</li>
+                        <li class="nav-item">
+                            <a href="{{ route('stock-opname.index') }}"
+                                class="nav-link {{ request()->routeIs('stock-opname.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-clipboard-check"></i>
+                                <p>Stock Opname</p>
+                            </a>
+                        </li>
                         <li class="nav-item">
                             <a href="{{ route('penggunaan-bhp.index') }}"
                                 class="nav-link {{ request()->routeIs('penggunaan-bhp.*') ? 'active' : '' }}">
@@ -187,7 +168,7 @@
                             <a href="{{ route('pemeliharaan.analysis') }}"
                                 class="nav-link {{ request()->routeIs('pemeliharaan.analysis') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-chart-area"></i>
-                                <p>Analisis Biaya</p>
+                                <p>Analisis Biaya (Ka.Sek)</p>
                             </a>
                         </li>
                         <li class="nav-item">
@@ -195,6 +176,28 @@
                                 class="nav-link {{ request()->routeIs('laporan.mutasi*') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-file-invoice"></i>
                                 <p>Laporan Mutasi</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-header">PENGATURAN</li>
+                        <li class="nav-item">
+                            <a href="{{ route('settings.backup') }}" class="nav-link">
+                                <i class="nav-icon fas fa-database"></i>
+                                <p>Backup Database</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('activity-logs.index') }}"
+                                class="nav-link {{ request()->routeIs('activity-logs.*') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-history"></i>
+                                <p>Log Aktivitas</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('settings.index') }}"
+                                class="nav-link {{ request()->routeIs('settings.index') ? 'active' : '' }}">
+                                <i class="nav-icon fas fa-cogs"></i>
+                                <p>Pengaturan Sistem</p>
                             </a>
                         </li>
                         @endhasanyrole

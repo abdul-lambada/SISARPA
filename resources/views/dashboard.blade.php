@@ -9,7 +9,7 @@
             <div class="small-box bg-info">
                 <div class="inner">
                     <h3>{{ $total_barang }}</h3>
-                    <p>Total Barang</p>
+                    <p>{{ Auth::user()->hasAnyRole(['Super Admin', 'Petugas Sarpras', 'Kepala Sekolah']) ? 'Total Barang' : 'Barang Tersedia' }}</p>
                 </div>
                 <div class="icon">
                     <i class="fas fa-box"></i>
@@ -19,6 +19,7 @@
             </div>
         </div>
 
+        @hasanyrole('Super Admin|Petugas Sarpras|Kepala Sekolah')
         <div class="col-lg-3 col-6">
             <div class="small-box bg-danger">
                 <div class="inner">
@@ -32,12 +33,13 @@
                         class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
+        @endhasanyrole
 
         <div class="col-lg-3 col-6">
             <div class="small-box bg-warning">
                 <div class="inner">
                     <h3>{{ $sedang_dipinjam }}</h3>
-                    <p>Sedang Dipinjam</p>
+                    <p>{{ Auth::user()->hasAnyRole(['Super Admin', 'Petugas Sarpras', 'Kepala Sekolah']) ? 'Sedang Dipinjam' : 'Saya Pinjam' }}</p>
                 </div>
                 <div class="icon">
                     <i class="fas fa-hand-holding"></i>
@@ -47,6 +49,7 @@
             </div>
         </div>
 
+        @hasanyrole('Super Admin|Petugas Sarpras')
         <div class="col-lg-3 col-6">
             <div class="small-box bg-success">
                 <div class="inner">
@@ -60,6 +63,7 @@
                         class="fas fa-arrow-circle-right"></i></a>
             </div>
         </div>
+        @endhasanyrole
     </div>
 
     @hasanyrole('Super Admin|Petugas Sarpras')

@@ -29,11 +29,12 @@ class SettingController extends Controller
             $data['school_logo'] = $logoName;
         }
 
+        $old_settings = Setting::pluck('value', 'key')->toArray();
         foreach ($data as $key => $value) {
             Setting::set($key, $value);
         }
 
-        LogHelper::log('Memperbarui pengaturan sistem/identitas sekolah');
+        LogHelper::log('Memperbarui pengaturan sistem/identitas sekolah', null, $data, $old_settings);
 
         return redirect()->back()->with('success', 'Pengaturan berhasil diperbarui.');
     }

@@ -120,8 +120,9 @@ class BarangController extends Controller
             $data['foto_barang'] = $request->file('foto_barang')->store('barang', 'public');
         }
 
+        $old_data = $barang->toArray();
         $barang->update($data);
-        LogHelper::log('Memperbarui data barang: ' . $barang->nama_barang, $barang, $data);
+        LogHelper::log('Memperbarui data barang: ' . $barang->nama_barang, $barang, $data, $old_data);
 
         return redirect()->route('barang.index')->with('success', 'Barang berhasil diperbarui.');
     }
