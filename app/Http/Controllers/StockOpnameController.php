@@ -8,6 +8,7 @@ use App\Models\Barang;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\Auth;
+use App\Helpers\LogHelper;
 
 class StockOpnameController extends Controller
 {
@@ -127,10 +128,35 @@ class StockOpnameController extends Controller
 
     public function finalize($id)
     {
-        $opname = StockOpname::findOrFail($id);
-        $opname->status = 'selesai';
-        $opname->save();
+        \Illuminate\Support\Facades\DB::beginTransaction();
+        try {
+            $opname = StockOpname::with('details.barang')->findOrFail($id);
+            
+            if ($opname->status == 'selesai') {
+                return redirect()->route('stock-opname.show', $id)->with('error', 'Opname sudah pernah difinalisasi.');
+            }
 
-        return redirect()->route('stock-opname.show', $id)->with('success', 'Stock Opname telah difinalisasi.');
+            // Sync ke stok barang sebenarnya
+            foreach ($opname->details as $detail) {
+                $barang = $detail->barang;
+                if ($barang) {
+                    $barang->update([
+                        'stok' => $detail->jumlah_fisik
+                    ]);
+                }
+            }
+
+            $opname->status = 'selesai';
+            $opname->save();
+
+            \Illuminate\Support\Facades\DB::commit();
+            
+            \App\Helpers\LogHelper::log('Finalisasi Stock Opname & Sinkronisasi Stok Ruangan ' . $opname->ruangan, $opname);
+
+            return redirect()->route('stock-opname.show', $id)->with('success', 'Stock Opname telah difinalisasi. Stok sistem telah diperbarui sesuai hasil fisik.');
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\DB::rollBack();
+            return redirect()->back()->with('error', 'Gagal finalisasi: ' . $e->getMessage());
+        }
     }
 }

@@ -59,6 +59,7 @@ class UserController extends Controller
             'username' => $request->username,
             'no_induk' => $request->no_induk,
             'email' => $request->email,
+            'no_hp' => $request->no_hp,
             'password' => Hash::make($request->password),
             'jenis_user' => $request->jenis_user,
             'kelas' => $request->kelas,

@@ -85,11 +85,20 @@ class LaporanKerusakanController extends Controller
 
     public function updateStatus(Request $request, $id)
     {
-        $report = LaporanKerusakan::findOrFail($id);
+        if (!Auth::user()->hasAnyRole(['Super Admin', 'Petugas Sarpras'])) {
+            return response()->json(['success' => false, 'message' => 'Anda tidak memiliki hak akses.'], 403);
+        }
+
+        $report = LaporanKerusakan::with('barang')->findOrFail($id);
         $report->update([
             'status' => $request->status,
             'catatan_admin' => $request->catatan
         ]);
+
+        // INTEG: Jika status diproses, otomatis barang jadi 'rusak'
+        if ($request->status == 'diproses') {
+            $report->barang->update(['kondisi' => 'rusak']);
+        }
 
         return response()->json(['success' => true, 'message' => 'Status laporan diperbarui.']);
     }

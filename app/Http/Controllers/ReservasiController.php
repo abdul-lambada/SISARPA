@@ -110,6 +110,10 @@ class ReservasiController extends Controller
 
     public function updateStatus(Request $request, $id)
     {
+        if (!Auth::user()->hasAnyRole(['Super Admin', 'Petugas Sarpras'])) {
+            return response()->json(['success' => false, 'message' => 'Anda tidak memiliki hak akses.'], 403);
+        }
+
         $reservasi = Reservasi::findOrFail($id);
         $reservasi->update([
             'status' => $request->status,
