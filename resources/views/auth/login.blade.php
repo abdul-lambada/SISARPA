@@ -17,16 +17,30 @@
     <link rel="stylesheet" href="{{ asset('adminlte/dist/css/adminlte.min.css') }}">
     <style>
         .login-page {
-            background: linear-gradient(135deg, #007bff 0%, #00d2ff 100%);
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
         }
-
         .login-box {
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 400px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s;
         }
+        .login-box:hover { transform: translateY(-5px); }
+        .card { border: none !important; }
+        .btn-primary { background: #2c5364; border: none; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .btn-primary:hover { background: #0f2027; }
+        .back-to-home { color: #fff; text-decoration: none; position: absolute; top: 20px; left: 20px; font-weight: 500; font-size: 0.9rem; }
+        .back-to-home:hover { color: #00d2ff; }
     </style>
 </head>
 
 <body class="hold-transition login-page">
+    <a href="{{ url('/') }}" class="back-to-home"><i class="fas fa-arrow-left mr-2"></i>Back to Homepage</a>
     <div class="login-box">
         <div class="card card-outline card-primary">
             <div class="card-header text-center">

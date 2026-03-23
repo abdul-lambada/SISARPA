@@ -23,6 +23,18 @@
     <link rel="stylesheet" href="{{ asset('adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('adminlte/dist/css/adminlte.min.css') }}">
+    <style>
+        .main-sidebar { background: linear-gradient(180deg, #1c2b36 0%, #343a40 100%) !important; }
+        .nav-sidebar .nav-item .active { border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
+        .card { border-radius: 12px; border: none; box-shadow: 0 5px 15px rgba(0,0,0,0.05) !important; transition: transform .2s ease; }
+        .card:hover { transform: translateY(-2px); }
+        .btn { border-radius: 8px; font-weight: 500; transition: all 0.3s; }
+        .btn:hover { box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .content-header h1 { font-size: 1.5rem; letter-spacing: -0.5px; }
+        .breadcrumb { background: transparent; padding: 0; }
+        .main-footer { font-size: 0.85rem; border-top: 1px solid #eee; }
+        .badge { padding: 0.5em 0.8em; border-radius: 6px; }
+    </style>
     @stack('css')
 </head>
 
@@ -87,56 +99,56 @@
                         </li>
 
                         @hasanyrole('Super Admin|Petugas Sarpras')
-                        <li class="nav-header">MASTER DATA</li>
+                        <li class="nav-header">DATA UTAMA</li>
                         <li class="nav-item">
                             <a href="{{ route('kategori.index') }}"
                                 class="nav-link {{ request()->routeIs('kategori.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-list"></i>
-                                <p>Kategori</p>
+                                <i class="nav-icon fas fa-tags"></i>
+                                <p>Kelompok Barang</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('barang.index') }}"
                                 class="nav-link {{ request()->routeIs('barang.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-box"></i>
-                                <p>Data Barang</p>
+                                <i class="nav-icon fas fa-boxes"></i>
+                                <p>Inventaris Barang</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('ruangan.index') }}"
                                 class="nav-link {{ request()->routeIs('ruangan.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-door-open"></i>
-                                <p>Data Ruangan</p>
+                                <i class="nav-icon fas fa-warehouse"></i>
+                                <p>Daftar Ruangan</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('users.index') }}"
                                 class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-users"></i>
-                                <p>Manajemen User</p>
+                                <i class="nav-icon fas fa-user-friends"></i>
+                                <p>Data Guru & Siswa</p>
                             </a>
                         </li>
                         @endhasanyrole
 
-                        <li class="nav-header">LAYANAN & TRANSAKSI</li>
+                        <li class="nav-header">PELAYANAN SEKOLAH</li>
                         <li class="nav-item">
                             <a href="{{ route('peminjaman.index') }}"
                                 class="nav-link {{ request()->routeIs('peminjaman.*') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-hand-holding"></i>
-                                <p>Peminjaman Aset</p>
+                                <p>Pinjam Barang (Aset)</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('reservasi.index') }}"
                                 class="nav-link {{ request()->routeIs('reservasi.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-calendar-alt"></i>
-                                <p>Reservasi Ruangan</p>
+                                <i class="nav-icon fas fa-door-closed"></i>
+                                <p>Pakai Ruangan</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('laporan-kerusakan.index') }}"
                                 class="nav-link {{ request()->routeIs('laporan-kerusakan.*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-exclamation-triangle"></i>
+                                <i class="nav-icon fas fa-tools"></i>
                                 <p>Lapor Kerusakan</p>
                             </a>
                         </li>
@@ -147,57 +159,57 @@
                             <a href="{{ route('stock-opname.index') }}"
                                 class="nav-link {{ request()->routeIs('stock-opname.*') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-clipboard-check"></i>
-                                <p>Stock Opname</p>
+                                <p>Cek Stok Fisik (Opname)</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('penggunaan-bhp.index') }}"
                                 class="nav-link {{ request()->routeIs('penggunaan-bhp.*') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-sign-out-alt"></i>
-                                <p>Distribusi (BHP)</p>
+                                <p>Pemakaian Barang (BHP)</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('pemeliharaan.index') }}"
                                 class="nav-link {{ request()->routeIs('pemeliharaan.*') && !request()->routeIs('pemeliharaan.analysis') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-tools"></i>
-                                <p>Pemeliharaan</p>
+                                <i class="nav-icon fas fa-screwdriver"></i>
+                                <p>Riwayat Servis</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('pemeliharaan.analysis') }}"
                                 class="nav-link {{ request()->routeIs('pemeliharaan.analysis') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-chart-area"></i>
+                                <i class="nav-icon fas fa-chart-pie"></i>
                                 <p>Analisis Biaya (Ka.Sek)</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('laporan.mutasi') }}"
                                 class="nav-link {{ request()->routeIs('laporan.mutasi*') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-file-invoice"></i>
-                                <p>Laporan Mutasi</p>
+                                <i class="nav-icon fas fa-file-pdf"></i>
+                                <p>Buku Inventaris (Mutasi)</p>
                             </a>
                         </li>
 
-                        <li class="nav-header">PENGATURAN</li>
+                        <li class="nav-header">KEAMANAN & SISTEM</li>
                         <li class="nav-item">
                             <a href="{{ route('settings.backup') }}" class="nav-link">
-                                <i class="nav-icon fas fa-database"></i>
-                                <p>Backup Database</p>
+                                <i class="nav-icon fas fa-cloud-download-alt"></i>
+                                <p>Simpan Cadangan (Backup)</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('activity-logs.index') }}"
                                 class="nav-link {{ request()->routeIs('activity-logs.*') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-history"></i>
-                                <p>Log Aktivitas</p>
+                                <p>Riwayat Aktivitas</p>
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ route('settings.index') }}"
                                 class="nav-link {{ request()->routeIs('settings.index') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-cogs"></i>
-                                <p>Pengaturan Sistem</p>
+                                <i class="nav-icon fas fa-cog"></i>
+                                <p>Pengaturan Identitas</p>
                             </a>
                         </li>
                         @endhasanyrole
@@ -211,14 +223,20 @@
         <!-- Content Wrapper. Contains page content -->
         <div class="content-wrapper">
             <!-- Content Header (Page header) -->
-            <div class="content-header">
+            <div class="content-header shadow-sm mb-3" style="background: #fff;">
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1 class="m-0">@yield('header')</h1>
-                        </div><!-- /.col -->
-                    </div><!-- /.row -->
-                </div><!-- /.container-fluid -->
+                            <h1 class="m-0 text-bold text-dark"><i class="fas fa-chevron-right text-primary mr-2 small"></i> @yield('header')</h1>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="{{ route('dashboard') }}"><i class="fas fa-home"></i> Beranda</a></li>
+                                <li class="breadcrumb-item active">@yield('title')</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
             </div>
             <!-- /.content-header -->
 

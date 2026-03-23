@@ -78,24 +78,57 @@
         </div>
     </header>
 
+    <!-- Quick Actions for Roles -->
+    <section class="py-12 bg-white -mt-10 relative z-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid md:grid-cols-3 gap-6">
+            <!-- For Students -->
+            <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-100 group hover:bg-blue-600 hover:text-white transition-all">
+                <div class="bg-blue-50 w-14 h-14 rounded-2xl flex items-center justify-center text-blue-600 mb-6 group-hover:bg-white/20 group-hover:text-white transition">
+                    <i class="fas fa-user-graduate text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Area Siswa</h3>
+                <p class="text-slate-500 group-hover:text-blue-100 text-sm leading-relaxed mb-6">Gunakan NISN untuk login. Pinjam alat laboratorium, olahraga, atau lapor kerusakan fasilitas kelas.</p>
+                <a href="{{ route('login') }}" class="font-bold text-blue-600 group-hover:text-white flex items-center gap-2">Masuk Siswa <i class="fas fa-arrow-right text-xs"></i></a>
+            </div>
+            <!-- For Teachers -->
+            <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-100 group hover:bg-emerald-600 hover:text-white transition-all">
+                <div class="bg-emerald-50 w-14 h-14 rounded-2xl flex items-center justify-center text-emerald-600 mb-6 group-hover:bg-white/20 group-hover:text-white transition">
+                    <i class="fas fa-chalkboard-teacher text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Area Guru</h3>
+                <p class="text-slate-500 group-hover:text-emerald-100 text-sm leading-relaxed mb-6">Booking ruangan lab, ruang rapat, atau pinjam proyektor menggunakan akun NUPTK/Email.</p>
+                <a href="{{ route('login') }}" class="font-bold text-emerald-600 group-hover:text-white flex items-center gap-2">Masuk Guru <i class="fas fa-arrow-right text-xs"></i></a>
+            </div>
+            <!-- For Visitors/Public -->
+            <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-100 group hover:bg-amber-500 hover:text-white transition-all">
+                <div class="bg-amber-50 w-14 h-14 rounded-2xl flex items-center justify-center text-amber-600 mb-6 group-hover:bg-white/20 group-hover:text-white transition">
+                    <i class="fas fa-bullhorn text-2xl"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Lapor Publik</h3>
+                <p class="text-slate-500 group-hover:text-amber-100 text-sm leading-relaxed mb-6">Masyarakat sekolah dapat melaporkan temuan kerusakan fasilitas tanpa harus login ke sistem.</p>
+                <a href="{{ route('laporan-kerusakan.create') }}" class="font-bold text-amber-600 group-hover:text-white flex items-center gap-2">Lapor Sekarang <i class="fas fa-arrow-right text-xs"></i></a>
+            </div>
+        </div>
+    </section>
+
     <!-- Room Status Section -->
     <section class="py-20 bg-slate-50" id="ruangan">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-12">
-            <h2 class="text-3xl font-bold text-slate-900 mb-4">Status Penggunaan Ruangan</h2>
-            <p class="text-slate-600">Data ketersediaan ruangan per hari ini: <span class="font-bold text-slate-900 underline">{{ now()->translatedFormat('d F Y') }}</span></p>
+            <h2 class="text-3xl font-bold text-slate-900 mb-4">Cek Ketersediaan Ruangan</h2>
+            <p class="text-slate-600">Jadwal penggunaan gedung & laboratorium hari ini: <span class="font-extrabold text-blue-600">{{ now()->translatedFormat('d F Y') }}</span></p>
         </div>
 
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 overflow-x-auto pb-4">
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
                 @foreach($ruangans as $ruangan)
                 @php $is_booked = in_array($ruangan->id, $reservations ?? []); @endphp
-                <div class="bg-white p-6 rounded-2xl shadow-sm border {{ $is_booked ? 'border-red-100' : 'border-slate-200' }} hover:shadow-md transition">
+                <div class="bg-white p-6 rounded-3xl shadow-sm border {{ $is_booked ? 'border-red-100' : 'border-slate-100' }} hover:shadow-xl transition-all">
                     <div class="flex justify-between items-start mb-4">
-                        <div class="p-3 {{ $is_booked ? 'bg-red-50 text-red-600' : 'bg-blue-50 text-blue-600' }} rounded-xl">
+                        <div class="p-3 {{ $is_booked ? 'bg-red-50 text-red-600' : 'bg-blue-50 text-blue-600' }} rounded-2xl">
                             <i class="fas fa-door-open"></i>
                         </div>
-                        <span class="px-2 py-1 text-[10px] font-extrabold uppercase rounded-lg {{ $is_booked ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700' }}">
-                            {{ $is_booked ? 'Dipakai' : 'Tersedia' }}
+                        <span class="px-2 py-1 text-[10px] font-extrabold uppercase rounded-lg {{ $is_booked ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-700' }}">
+                            {{ $is_booked ? 'Sedang Dipakai' : 'Bisa Dipakai' }}
                         </span>
                     </div>
                     <h3 class="font-bold text-slate-800 text-lg mb-1 leading-tight">{{ $ruangan->nama_ruangan }}</h3>
@@ -111,48 +144,46 @@
     <!-- Procedure Section -->
     <section class="py-24 bg-white" id="prosedur">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-blue-600 rounded-[2.5rem] p-8 md:p-16 text-white relative overflow-hidden">
-                <div class="grid md:grid-cols-2 gap-12 relative z-10">
+            <div class="bg-slate-900 rounded-[3rem] p-8 md:p-16 text-white relative overflow-hidden">
+                <div class="grid md:grid-cols-2 gap-16 relative z-10">
                     <div>
-                        <h2 class="text-3xl md:text-4xl font-extrabold mb-8">Alur Pelaporan Kerusakan Barang</h2>
-                        <p class="text-blue-100 leading-relaxed mb-6">
-                            Jika Anda menemukan fasilitas atau inventaris sekolah yang rusak, mohon segara melaporkan agar dapat segera diperbaiki oleh tim Sarana Prasarana.
+                        <h2 class="text-3xl md:text-5xl font-extrabold mb-8 leading-tight">Prosedur Layanan Sarpras SMK</h2>
+                        <p class="text-slate-400 leading-relaxed mb-10 text-lg">
+                            Kami memudahkan akses fasilitas agar kegiatan pembelajaran tidak terganggu. Ikuti panduan sederhana di samping untuk mulai menggunakan layanan.
                         </p>
-                        <div class="flex gap-4">
-                            <a href="{{ route('laporan-kerusakan.create') }}" class="bg-white text-blue-600 px-6 py-3 rounded-xl font-bold text-sm hover:bg-blue-50 transition">
-                                <i class="fas fa-paper-plane mr-2"></i> Kirim Laporan Sekarang
-                            </a>
+                        <div class="flex flex-col gap-4">
+                            <div class="bg-white/10 p-5 rounded-3xl border border-white/20 flex items-center gap-4">
+                                <div class="bg-blue-600 h-10 w-10 rounded-full flex items-center justify-center font-bold">!</div>
+                                <span class="text-sm font-semibold">Gunakan Akun Sekolah yang sudah terdaftar di Buku Induk Digital.</span>
+                            </div>
                         </div>
                     </div>
                     <div>
-                        <ul class="space-y-6">
-                            <li class="flex gap-4">
-                                <div class="bg-white/20 h-8 w-8 rounded-full flex items-center justify-center font-bold flex-shrink-0">1</div>
+                        <ul class="space-y-10">
+                            <li class="flex gap-6">
+                                <div class="bg-blue-600 h-12 w-12 rounded-2xl flex items-center justify-center font-extrabold text-xl flex-shrink-0">01</div>
                                 <div>
-                                    <h4 class="font-bold text-xl mb-1 text-white">Lapor via Portal</h4>
-                                    <p class="text-blue-100 text-sm">Buka menu 'Area Petugas' atau klik tombol lapor di samping.</p>
+                                    <h4 class="font-bold text-2xl mb-2 text-white italic">PILIH & PESAN</h4>
+                                    <p class="text-slate-400 text-sm leading-relaxed">Login ke dashboard, pilih barang atau ruangan yang ingin dipergunakan, tentukan jadwalnya.</p>
                                 </div>
                             </li>
-                            <li class="flex gap-4">
-                                <div class="bg-white/20 h-8 w-8 rounded-full flex items-center justify-center font-bold flex-shrink-0">2</div>
+                            <li class="flex gap-6">
+                                <div class="bg-emerald-600 h-12 w-12 rounded-2xl flex items-center justify-center font-extrabold text-xl flex-shrink-0">02</div>
                                 <div>
-                                    <h4 class="font-bold text-xl mb-1 text-white">Verifikasi Kondisi</h4>
-                                    <p class="text-blue-100 text-sm">Petugas Sarpras akan menuju lokasi untuk pengecekan fisik barang.</p>
+                                    <h4 class="font-bold text-2xl mb-2 text-white italic">TANDA TANGAN</h4>
+                                    <p class="text-slate-400 text-sm leading-relaxed">Berikan tanda tangan digital di layar sebagai bukti serah terima barang yang sah.</p>
                                 </div>
                             </li>
-                            <li class="flex gap-4">
-                                <div class="bg-white/20 h-8 w-8 rounded-full flex items-center justify-center font-bold flex-shrink-0">3</div>
+                            <li class="flex gap-6">
+                                <div class="bg-amber-500 h-12 w-12 rounded-2xl flex items-center justify-center font-extrabold text-xl flex-shrink-0">03</div>
                                 <div>
-                                    <h4 class="font-bold text-xl mb-1 text-white">Tindakan Perbaikan</h4>
-                                    <p class="text-blue-100 text-sm">Service atau pemeliharaan dijadwalkan agar barang berfungsi kembali.</p>
+                                    <h4 class="font-bold text-2xl mb-2 text-white italic">LAPOR KONDISI</h4>
+                                    <p class="text-slate-400 text-sm leading-relaxed">Kembalikan tepat waktu dan laporkan jika ada kerusakan agar segera diperbaiki oleh tim teknis.</p>
                                 </div>
                             </li>
                         </ul>
                     </div>
                 </div>
-                <!-- Subtle background elements -->
-                <div class="absolute -bottom-20 -right-20 bg-white/10 w-64 h-64 rounded-full blur-3xl"></div>
-                <div class="absolute -top-20 -left-20 bg-blue-400 w-64 h-64 rounded-full blur-3xl opacity-30"></div>
             </div>
         </div>
     </section>

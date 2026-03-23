@@ -64,7 +64,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('peminjaman/kembalikan/{id}', [PeminjamanController::class, 'kembalikan'])->name('peminjaman.kembalikan');
         Route::post('peminjaman/send-wa/{id}', [PeminjamanController::class, 'sendWaReminder'])->name('peminjaman.send-wa');
         Route::get('peminjaman/print-bast/{peminjaman}', [PeminjamanController::class, 'printBast'])->name('peminjaman.print-bast');
-        Route::post('laporan-kerusakan/update-status/{id}', [\App\Http\Controllers\LaporanKerusakanController.php, 'updateStatus'])->name('laporan-kerusakan.update-status');
+        Route::post('laporan-kerusakan/update-status/{id}', [\App\Http\Controllers\LaporanKerusakanController::class, 'updateStatus'])->name('laporan-kerusakan.update-status');
     });
 
     // All Auth Users
