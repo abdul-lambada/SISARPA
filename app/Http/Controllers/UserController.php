@@ -124,4 +124,19 @@ class UserController extends Controller
             return redirect()->route('users.index')->with('error', 'Gagal import: ' . $e->getMessage());
         }
     }
+
+    public function syncBukuInduk()
+    {
+        try {
+            \Illuminate\Support\Facades\Artisan::call('sync:buku-induk-users');
+            $output = \Illuminate\Support\Facades\Artisan::output();
+            
+            // Log output for debugging if needed
+            \Illuminate\Support\Facades\Log::info("Buku Induk Sync Output: " . $output);
+
+            return redirect()->route('users.index')->with('success', 'Sinkronisasi selesai! Data guru & siswa telah diperbarui.');
+        } catch (\Exception $e) {
+            return redirect()->route('users.index')->with('error', 'Gagal sinkronisasi: ' . $e->getMessage());
+        }
+    }
 }

@@ -9,6 +9,12 @@
         <div class="card">
             <div class="card-header">
                 <div class="float-right">
+                    <form action="{{ route('users.sync-buku-induk') }}" method="POST" style="display: inline;" id="sync-form">
+                        @csrf
+                        <button type="button" class="btn btn-info" onclick="confirmSync()">
+                            <i class="fas fa-sync"></i> Sinkron Buku Induk
+                        </button>
+                    </form>
                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#importModal">
                         <i class="fas fa-file-import"></i> Import DAPODIK
                     </button>
@@ -96,5 +102,30 @@
             ]
         });
     });
+
+    function confirmSync() {
+        Swal.fire({
+            title: 'Sinkronisasi Buku Induk?',
+            text: "Sistem akan menarik data guru dan siswa terbaru dari database Buku Induk Digital.",
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#17a2b8',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Sinkronkan!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Mohon Tunggu',
+                    text: 'Sedang mensinkronkan data...',
+                    allowOutsideClick: false,
+                    didOpen: () => {
+                        Swal.showLoading()
+                    }
+                });
+                document.getElementById('sync-form').submit();
+            }
+        })
+    }
 </script>
 @endpush

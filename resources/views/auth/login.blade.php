@@ -37,14 +37,14 @@
                 <form action="{{ route('login') }}" method="post">
                     @csrf
                     <div class="input-group mb-3">
-                        <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
-                            placeholder="Email (admin@sisarpa.com)" value="{{ old('email') }}">
+                        <input type="text" name="login" class="form-control @error('login') is-invalid @enderror"
+                            placeholder="Email / Username / NISN" value="{{ old('login') }}">
                         <div class="input-group-append">
                             <div class="input-group-text">
-                                <span class="fas fa-envelope"></span>
+                                <span class="fas fa-user-circle"></span>
                             </div>
                         </div>
-                        @error('email')
+                        @error('login')
                             <span class="error invalid-feedback">{{ $message }}</span>
                         @enderror
                     </div>
@@ -77,12 +77,12 @@
                 </form>
 
                 <div class="mt-4 p-3 bg-light rounded border">
-                    <small class="text-muted d-block text-center font-weight-bold mb-2">AKUN DEMO</small>
-                    <div class="row text-xs">
-                        <div class="col-6">Admin: admin@sisarpa.com</div>
-                        <div class="col-6">User: siswa@sisarpa.com</div>
-                        <div class="col-12 mt-1">Pass: password</div>
-                    </div>
+                    <small class="text-muted d-block text-center font-weight-bold mb-2">PANDUAN LOGIN</small>
+                    <ul class="text-xs mb-0">
+                        <li>Gunakan **Username** atau **Email** dari Buku Induk Digital.</li>
+                        <li>Siswa login menggunakan **NISN** sebagai Username & Password.</li>
+                        <li>Contoh Admin: <code>admin</code> / password: <code>admin</code></li>
+                    </ul>
                 </div>
             </div>
         </div>

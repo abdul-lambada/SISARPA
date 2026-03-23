@@ -52,6 +52,7 @@ Route::middleware(['auth'])->group(function () {
         Route::post('reservasi/update-status/{id}', [ReservasiController::class, 'updateStatus'])->name('reservasi.update-status');
 
         Route::post('users/import', [UserController::class, 'import'])->name('users.import');
+        Route::post('users/sync-buku-induk', [UserController::class, 'syncBukuInduk'])->name('users.sync-buku-induk');
         Route::resource('users', UserController::class);
 
         Route::get('settings/backup', [\App\Http\Controllers\BackupController::class, 'download'])->name('settings.backup');
