@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SISARPA - Sistem Informasi Sarana & Prasarana</title>
+    <title>{{ $settings['school_name'] ?? 'SISARPA' }} - Sistem Informasi Sarana & Prasarana</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
@@ -18,10 +18,14 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
                 <div class="flex items-center gap-2">
-                    <div class="bg-blue-600 p-2 rounded-lg text-white">
-                        <i class="fas fa-school text-xl"></i>
-                    </div>
-                    <span class="text-xl font-bold tracking-tight text-slate-800">SISARPA</span>
+                    @if(isset($settings['school_logo']))
+                        <img src="{{ asset('storage/settings/' . $settings['school_logo']) }}" alt="Logo" class="h-10 w-auto">
+                    @else
+                        <div class="bg-blue-600 p-2 rounded-lg text-white">
+                            <i class="fas fa-school text-xl"></i>
+                        </div>
+                    @endif
+                    <span class="text-xl font-bold tracking-tight text-slate-800">{{ $settings['school_name'] ?? 'SISARPA' }}</span>
                 </div>
                 <div class="hidden md:flex gap-8 text-sm font-semibold text-slate-600">
                     <a href="#about" class="hover:text-blue-600 transition">Tentang</a>
@@ -42,9 +46,9 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="grid md:grid-cols-2 gap-12 items-center">
                 <div>
-                    <h2 class="text-blue-600 font-bold tracking-widest text-sm uppercase mb-4">Official Platform</h2>
+                    <h2 class="text-blue-600 font-bold tracking-widest text-sm uppercase mb-4">{{ $settings['school_city'] ?? 'Official Platform' }}</h2>
                     <h1 class="text-4xl md:text-5xl font-extrabold text-slate-900 leading-tight mb-6">
-                        Sistem Monitoring Inventaris & Fasilitas Sekolah
+                        Sistem Monitoring Fasilitas {{ $settings['school_name'] ?? 'Sekolah' }}
                     </h1>
                     <p class="text-lg text-slate-600 mb-8 leading-relaxed">
                         Selamat datang di portal informasi Sarana & Prasarana. Kami memastikan seluruh fasilitas pendidikan dalam kondisi prima untuk menunjang kegiatan belajar mengajar.
@@ -157,9 +161,14 @@
     <footer class="bg-slate-900 text-white py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h3 class="text-2xl font-bold mb-4 flex items-center justify-center gap-2">
-                <i class="fas fa-school text-blue-500"></i> SISARPA
+                @if(isset($settings['school_logo']))
+                    <img src="{{ asset('storage/settings/' . $settings['school_logo']) }}" alt="Logo" class="h-8 w-auto">
+                @else
+                    <i class="fas fa-school text-blue-500"></i>
+                @endif
+                {{ $settings['school_name'] ?? 'SISARPA' }}
             </h3>
-            <p class="text-slate-400 mb-8">Asset Management with Modern Precision and Efficiency</p>
+            <p class="text-slate-400 mb-8">{{ $settings['school_address'] ?? 'Official Asset Management System' }}</p>
             <div class="flex justify-center gap-6 mb-12">
                 <a href="#" class="text-white hover:text-blue-400 transition text-xl"><i class="fab fa-facebook"></i></a>
                 <a href="#" class="text-white hover:text-blue-400 transition text-xl"><i class="fab fa-instagram"></i></a>

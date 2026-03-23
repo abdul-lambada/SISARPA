@@ -82,13 +82,13 @@
 
         <div class="signature-section">
             <div class="signature-box">
-                <p>Petugas Sarpras,</p>
-                <div style="height: 80px;"></div>
-                <p>( _______________________ )</p>
-                <p>NIP: ............................</p>
+                <p>Mengetahui,<br>Kepala Sekolah / Kasubag Sarpras,</p>
+                <div style="height: 60px;"></div>
+                <p><strong>( {{ \App\Models\Setting::get('school_principal_name', '_______________________') }} )</strong></p>
+                <p>NIP: {{ \App\Models\Setting::get('school_principal_nip', '............................') }}</p>
             </div>
             <div class="signature-box" style="float: right;">
-                <p>Peminjam,</p>
+                <p>Peminjam,<br><br></p>
                 <div class="signature-img">
                     @if($peminjaman->tanda_tangan)
                         <img src="{{ $peminjaman->tanda_tangan }}" style="height: 80px;">
@@ -96,7 +96,7 @@
                         <div style="height: 80px;"></div>
                     @endif
                 </div>
-                <p>( <strong>{{ $peminjaman->user->name }}</strong> )</p>
+                <p><strong>( {{ $peminjaman->user->name }} )</strong></p>
                 <p>{{ strtoupper($peminjaman->user->jenis_user) }}</p>
             </div>
         </div>

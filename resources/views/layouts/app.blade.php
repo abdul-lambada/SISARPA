@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>@yield('title') | SISARPA</title>
+    <title>@yield('title') | {{ \App\Models\Setting::get('school_name', 'SISARPA') }}</title>
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
@@ -56,7 +56,13 @@
         <aside class="main-sidebar sidebar-dark-primary elevation-4">
             <!-- Brand Logo -->
             <a href="{{ route('dashboard') }}" class="brand-link">
-                <span class="brand-text font-weight-light">SISARPA</span>
+                @php $logo = \App\Models\Setting::get('school_logo'); @endphp
+                @if($logo && $logo != 'default_logo.png')
+                    <img src="{{ asset('storage/settings/' . $logo) }}" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+                @else
+                    <i class="fas fa-school brand-image elevation-3 p-1 mt-1"></i>
+                @endif
+                <span class="brand-text font-weight-light">{{ \App\Models\Setting::get('school_name', 'SISARPA') }}</span>
             </a>
 
             <!-- Sidebar -->
@@ -223,7 +229,7 @@
         </div>
         <!-- /.content-wrapper -->
         <footer class="main-footer">
-            <strong>Copyright &copy; 2026 SISARPA.</strong>
+            <strong>Copyright &copy; {{ date('Y') }} {{ \App\Models\Setting::get('school_name', 'SISARPA') }}.</strong>
             All rights reserved.
         </footer>
     </div>

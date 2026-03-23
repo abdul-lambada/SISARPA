@@ -58,14 +58,14 @@
     <div class="footer">
         <div style="float: left; width: 250px; text-align: center;">
             <p>Mengetahui,</p>
-            <p>Kepala Sekolah</p>
+            <p>Kepala Sekolah / Kasubag</p>
             <div style="height: 60px;"></div>
-            <p>( _______________________ )</p>
-            <p>NIP: ............................</p>
+            <p><strong>( {{ \App\Models\Setting::get('school_principal_name', '_______________________') }} )</strong></p>
+            <p>NIP: {{ \App\Models\Setting::get('school_principal_nip', '............................') }}</p>
         </div>
-        <div class="sign">
-            <p>Dicetak Pada: {{ date('d F Y') }}</p>
-            <p>Pengelola Sarpras</p>
+        <div class="sign" style="float: right;">
+            <p>{{ \App\Models\Setting::get('school_regency', 'Jakarta') }}, {{ date('d F Y') }}</p>
+            <p>Pengelola Sarana Prasarana</p>
             <div style="height: 60px;"></div>
             <p>( _______________________ )</p>
             <p>NIP: ............................</p>

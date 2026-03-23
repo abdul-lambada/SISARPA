@@ -4,7 +4,9 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login | SISARPA</title>
+    <title>Login | {{ \App\Models\Setting::get('school_name', 'SISARPA') }}</title>
+@php $logo = \App\Models\Setting::get('school_logo'); @endphp
+@php $schoolName = \App\Models\Setting::get('school_name', 'SISARPA'); @endphp
 
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
@@ -28,8 +30,15 @@
     <div class="login-box">
         <div class="card card-outline card-primary">
             <div class="card-header text-center">
-                <a href="/" class="h1"><b>SI</b>SARPA</a>
-                <p class="mb-0">Sistem Inventaris & Sarpras</p>
+                <div class="mb-3">
+                    @if($logo && $logo != 'default_logo.png')
+                        <img src="{{ asset('storage/settings/' . $logo) }}" alt="Logo" class="img-fluid" style="max-height: 80px;">
+                    @else
+                        <i class="fas fa-school fa-3x text-primary"></i>
+                    @endif
+                </div>
+                <a href="/" class="h1"><b>{{ substr($schoolName, 0, 2) }}</b>{{ substr($schoolName, 2) }}</a>
+                <p class="mb-0 text-muted small text-bold text-uppercase">Sistem Inventaris & Sarpras</p>
             </div>
             <div class="card-body">
                 <p class="login-box-msg">Silahkan masuk untuk memulai sesi</p>
