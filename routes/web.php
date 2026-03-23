@@ -13,9 +13,9 @@ use App\Http\Controllers\ReservasiController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AuthController;
 
-Route::get('/', function () {
-    return redirect()->route('login');
-});
+use App\Http\Controllers\PublicController;
+
+Route::get('/', [PublicController::class, 'index'])->name('home');
 
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);

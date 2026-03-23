@@ -81,7 +81,8 @@ class StockOpnameController extends Controller
     {
         $request->validate([
             'kode_barang' => 'required|exists:barang,kode_barang',
-            'jumlah' => 'nullable|integer|min:1'
+            'jumlah' => 'nullable|integer|min:1',
+            'foto_bukti' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
         ]);
 
         $opname = StockOpname::findOrFail($id);
@@ -99,6 +100,12 @@ class StockOpnameController extends Controller
         $increment = $request->jumlah ?? 1;
         $detail->increment('jumlah_fisik', $increment);
         $detail->selisih = $detail->jumlah_fisik - $detail->jumlah_sistem;
+        
+        if ($request->hasFile('foto_bukti')) {
+            $path = $request->file('foto_bukti')->store('stock_opname', 'public');
+            $detail->foto_bukti = $path;
+        }
+
         $detail->save();
 
         return response()->json([

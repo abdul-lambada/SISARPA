@@ -72,6 +72,7 @@
                                     <th>Nama Barang / Deskripsi</th>
                                     <th width="100">Satuan Sistem</th>
                                     <th width="100">Fisik Ditemukan</th>
+                                    <th width="100">Foto Bukti</th>
                                     <th width="80">Selisih</th>
                                     <th>Keterangan / Analisis</th>
                                 </tr>
@@ -86,6 +87,15 @@
                                         <td>{{ $d->barang->nama_barang }}</td>
                                         <td class="text-center">{{ $d->jumlah_sistem }}</td>
                                         <td class="text-center">{{ $d->jumlah_fisik }}</td>
+                                        <td class="text-center">
+                                            @if($d->foto_bukti)
+                                                <a href="{{ asset('storage/' . $d->foto_bukti) }}" target="_blank">
+                                                    <img src="{{ asset('storage/' . $d->foto_bukti) }}" class="img-thumbnail" style="max-height: 50px;">
+                                                </a>
+                                            @else
+                                                <small class="text-muted italic">Tidak Ada Foto</small>
+                                            @endif
+                                        </td>
                                         <td
                                             class="text-center font-weight-bold {{ $d->selisih < 0 ? 'text-danger' : ($d->selisih > 0 ? 'text-success' : '') }}">
                                             {{ $d->selisih }}
@@ -104,7 +114,7 @@
                             </tbody>
                             <tfoot>
                                 <tr class="bg-light font-weight-bold">
-                                    <th colspan="5" class="text-right">TOTAL AKURASI (%) / TOTAL SELISIH:</th>
+                                    <th colspan="6" class="text-right">TOTAL AKURASI (%) / TOTAL SELISIH:</th>
                                     <th class="text-center {{ $total_selisih < 0 ? 'text-danger' : 'text-success' }}">
                                         {{ $total_selisih }}</th>
                                     <th class="text-center">

@@ -13,18 +13,20 @@
                 <div class="card-body">
                     <div id="reader" style="width: 100%;"></div>
                     <div class="mt-3">
-                        <div class="form-group">
-                            <label>Jumlah Input (Khusus BHP)</label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text"><i class="fas fa-layer-group"></i></span>
-                                </div>
-                                <input type="number" id="manual-qty" class="form-control" value="1" min="1">
-                            </div>
-                            <small class="text-muted">Biarkan "1" untuk scan aset satu per satu.</small>
+                        <div class="form-group mb-3">
+                            <label class="text-bold"><i class="fas fa-camera mr-1"></i> Foto Bukti Fisik (Opsional)</label>
+                            <input type="file" id="foto-bukti" class="form-control" accept="image/*" capture="environment">
+                            <small class="text-muted">Ambil foto barang untuk bukti autentik kondisi.</small>
                         </div>
-                        <div class="alert alert-info">
-                            <i class="fas fa-info-circle"></i> Scan QR Code pada barang untuk memverifikasi keberadaan fisik.
+                        <div class="form-group mb-3">
+                            <label class="text-bold"><i class="fas fa-cubes mr-1"></i> Jumlah Item</label>
+                            <div class="input-group">
+                                <input type="number" id="manual-qty" class="form-control font-weight-bold text-center" value="1" min="1">
+                            </div>
+                            <small class="text-muted">Ketik jumlah jika scan barang habis pakai (BHP).</small>
+                        </div>
+                        <div class="alert alert-info py-2 px-3 small">
+                            <i class="fas fa-info-circle"></i> Scan QR Code pada label barang untuk verifikasi.
                         </div>
                     </div>
                 </div>
@@ -80,18 +82,23 @@
 @push('js')
     <script src="https://unpkg.com/html5-qrcode"></script>
     <script>
-        function onScanSuccess(decodedText, decodedResult) {
-            // Hentikan scanner sementara untuk memproses request
-            // html5QrcodeScanner.clear(); 
+        function onScanSuccess(decodedText) {
+            let formData = new FormData();
+            formData.append('_token', "{{ csrf_token() }}");
+            formData.append('kode_barang', decodedText);
+            formData.append('jumlah', $('#manual-qty').val());
+            
+            let fileInput = document.getElementById('foto-bukti');
+            if (fileInput.files.length > 0) {
+                formData.append('foto_bukti', fileInput.files[0]);
+            }
 
             $.ajax({
                 url: "{{ route('stock-opname.update-scan', $opname->id) }}",
                 type: "POST",
-                data: {
-                    _token: "{{ csrf_token() }}",
-                    kode_barang: decodedText,
-                    jumlah: $('#manual-qty').val()
-                },
+                data: formData,
+                processData: false,
+                contentType: false,
                 success: function (response) {
                     if (response.success) {
                         const row = $('#row-' + decodedText);
@@ -103,6 +110,9 @@
                         row.addClass('table-success');
                         setTimeout(() => row.removeClass('table-success'), 2000);
 
+                        // Reset foto input setelah sukses supaya tidak terkirim lagi di scan berikutnya
+                        $('#foto-bukti').val('');
+
                         Toast.fire({
                             icon: 'success',
                             title: response.message
@@ -112,7 +122,7 @@
                     }
                 },
                 error: function () {
-                    Swal.fire('Error', 'Gagal memproses QR Code', 'error');
+                    Swal.fire('Error', 'Gagal memproses QR Code. Periksa ukuran foto.', 'error');
                 }
             });
         }

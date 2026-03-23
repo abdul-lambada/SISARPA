@@ -9,7 +9,7 @@ class StockOpnameDetail extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['stock_opname_id', 'barang_id', 'jumlah_sistem', 'jumlah_fisik', 'selisih', 'catatan'];
+    protected $fillable = ['stock_opname_id', 'barang_id', 'jumlah_sistem', 'jumlah_fisik', 'selisih', 'catatan', 'foto_bukti'];
 
     public function stockOpname()
     {
