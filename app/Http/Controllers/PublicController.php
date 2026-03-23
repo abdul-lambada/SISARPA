@@ -26,9 +26,18 @@ class PublicController extends Controller
         $stats = [
             'total_barang' => Barang::count(),
             'total_ruangan' => $ruangans->count(),
-            'barang_tersedia' => Barang::where('kondisi', 'baik')->count()
+            'barang_tersedia' => Barang::where('kondisi', 'baik')->count(),
+            'kategori_count' => \App\Models\Kategori::count(),
+            'ruangan_booking' => count($reservations)
         ];
 
-        return view('welcome', compact('ruangans', 'reservations', 'stats', 'settings'));
+        // Contoh: Ambil 4 aset utama untuk dipajang di landing page
+        $featured_assets = Barang::where('kondisi', 'baik')
+            ->where('tipe', 'aset')
+            ->latest()
+            ->take(4)
+            ->get();
+
+        return view('welcome', compact('ruangans', 'reservations', 'stats', 'settings', 'featured_assets'));
     }
 }

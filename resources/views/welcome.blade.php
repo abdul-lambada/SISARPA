@@ -8,7 +8,9 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
+        html { scroll-behavior: smooth; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        section { scroll-margin-top: 5rem; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900">
@@ -28,9 +30,10 @@
                     <span class="text-xl font-bold tracking-tight text-slate-800">{{ $settings['school_name'] ?? 'SISARPA' }}</span>
                 </div>
                 <div class="hidden md:flex gap-8 text-sm font-semibold text-slate-600">
-                    <a href="#about" class="hover:text-blue-600 transition">Tentang</a>
+                    <a href="#about" class="hover:text-blue-600 transition">Beranda</a>
+                    <a href="#katalog" class="hover:text-blue-600 transition">Katalog Aset</a>
                     <a href="#ruangan" class="hover:text-blue-600 transition">Cek Ruangan</a>
-                    <a href="#prosedur" class="hover:text-blue-600 transition">Prosedur Lapor</a>
+                    <a href="#prosedur" class="hover:text-blue-600 transition">Panduan Layanan</a>
                 </div>
                 <div>
                     <a href="{{ route('login') }}" class="bg-blue-600 text-white px-5 py-2 rounded-full text-sm font-bold shadow-lg shadow-blue-200 hover:bg-blue-700 transition flex items-center gap-2">
@@ -59,10 +62,10 @@
                             <span class="text-2xl font-bold block">{{ $stats['total_barang'] ?? 0 }}</span>
                             <span class="text-xs text-slate-500 uppercase font-semibold">Unit Aset</span>
                         </div>
-                        <div class="bg-green-50 p-4 rounded-xl border border-green-100 w-40 text-center">
-                            <i class="fas fa-check-circle text-green-500 mb-2 block"></i>
-                            <span class="text-2xl font-bold block">{{ $stats['barang_tersedia'] ?? 0 }}</span>
-                            <span class="text-xs text-slate-500 uppercase font-semibold">Kondisi Baik</span>
+                        <div class="bg-amber-50 p-4 rounded-xl border border-amber-100 w-40 text-center">
+                            <i class="fas fa-tags text-amber-500 mb-2 block"></i>
+                            <span class="text-2xl font-bold block">{{ $stats['kategori_count'] ?? 0 }}</span>
+                            <span class="text-xs text-slate-500 uppercase font-semibold">Kategori</span>
                         </div>
                     </div>
                 </div>
@@ -88,7 +91,7 @@
                 </div>
                 <h3 class="text-xl font-bold mb-3">Area Siswa</h3>
                 <p class="text-slate-500 group-hover:text-blue-100 text-sm leading-relaxed mb-6">Gunakan NISN untuk login. Pinjam alat laboratorium, olahraga, atau lapor kerusakan fasilitas kelas.</p>
-                <a href="{{ route('login') }}" class="font-bold text-blue-600 group-hover:text-white flex items-center gap-2">Masuk Siswa <i class="fas fa-arrow-right text-xs"></i></a>
+                <a href="{{ route('login', ['as' => 'siswa']) }}" class="font-bold text-blue-600 group-hover:text-white flex items-center gap-2">Masuk Siswa <i class="fas fa-arrow-right text-xs"></i></a>
             </div>
             <!-- For Teachers -->
             <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-100 group hover:bg-emerald-600 hover:text-white transition-all">
@@ -97,7 +100,7 @@
                 </div>
                 <h3 class="text-xl font-bold mb-3">Area Guru</h3>
                 <p class="text-slate-500 group-hover:text-emerald-100 text-sm leading-relaxed mb-6">Booking ruangan lab, ruang rapat, atau pinjam proyektor menggunakan akun NUPTK/Email.</p>
-                <a href="{{ route('login') }}" class="font-bold text-emerald-600 group-hover:text-white flex items-center gap-2">Masuk Guru <i class="fas fa-arrow-right text-xs"></i></a>
+                <a href="{{ route('login', ['as' => 'guru']) }}" class="font-bold text-emerald-600 group-hover:text-white flex items-center gap-2">Masuk Guru <i class="fas fa-arrow-right text-xs"></i></a>
             </div>
             <!-- For Visitors/Public -->
             <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-100 group hover:bg-amber-500 hover:text-white transition-all">
@@ -111,10 +114,53 @@
         </div>
     </section>
 
+    <!-- Featured Asset Section -->
+    <section class="py-20 bg-slate-50" id="katalog">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-6">
+                <div class="max-w-xl text-left">
+                    <h2 class="text-3xl font-bold text-slate-900 mb-4 font-extrabold uppercase tracking-tight">Katalog Inventaris Terbaru</h2>
+                    <p class="text-slate-600">Beberapa aset sekolah dalam kondisi <span class="text-emerald-600 font-bold">BAIK</span> yang siap dipergunakan untuk menunjang praktik dan pembelajaran.</p>
+                </div>
+                <a href="{{ route('login') }}" class="text-blue-600 font-bold hover:underline">Lihat Semua Katalog <i class="fas fa-external-link-alt ml-1 small"></i></a>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                @forelse($featured_assets as $asset)
+                <div class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden hover:shadow-2xl transition-all group">
+                    <div class="h-48 overflow-hidden relative">
+                         @if($asset->foto_barang)
+                            <img src="{{ asset('storage/' . $asset->foto_barang) }}" alt="{{ $asset->nama_barang }}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
+                         @else
+                            <div class="w-full h-full bg-slate-100 flex items-center justify-center text-slate-400">
+                                <i class="fas fa-image fa-3x"></i>
+                            </div>
+                         @endif
+                         <div class="absolute top-3 left-3">
+                            <span class="bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[10px] font-extrabold text-slate-800 shadow-sm border border-slate-100">
+                                {{ $asset->kategori->nama_kategori ?? 'Aset' }}
+                            </span>
+                         </div>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="font-bold text-slate-800 mb-2 truncate">{{ $asset->nama_barang }}</h3>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-semibold text-slate-500"><i class="fas fa-warehouse mr-1"></i> {{ $asset->lokasi }}</span>
+                            <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg">Stok: {{ $asset->stok }}</span>
+                        </div>
+                    </div>
+                </div>
+                @empty
+                <p class="col-span-full text-center text-slate-400 italic py-10">Belum ada katalog barang yang dipasang.</p>
+                @endforelse
+            </div>
+        </div>
+    </section>
+
     <!-- Room Status Section -->
-    <section class="py-20 bg-slate-50" id="ruangan">
+    <section class="py-20 bg-white" id="ruangan">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-12">
-            <h2 class="text-3xl font-bold text-slate-900 mb-4">Cek Ketersediaan Ruangan</h2>
+            <h2 class="text-3xl font-bold text-slate-900 mb-4 font-extrabold uppercase">Cek Ketersediaan Ruangan</h2>
             <p class="text-slate-600">Jadwal penggunaan gedung & laboratorium hari ini: <span class="font-extrabold text-blue-600">{{ now()->translatedFormat('d F Y') }}</span></p>
         </div>
 
@@ -122,7 +168,7 @@
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
                 @foreach($ruangans as $ruangan)
                 @php $is_booked = in_array($ruangan->id, $reservations ?? []); @endphp
-                <div class="bg-white p-6 rounded-3xl shadow-sm border {{ $is_booked ? 'border-red-100' : 'border-slate-100' }} hover:shadow-xl transition-all">
+                <div class="bg-slate-50 p-6 rounded-3xl shadow-sm border {{ $is_booked ? 'border-red-100' : 'border-slate-100' }} hover:shadow-xl transition-all">
                     <div class="flex justify-between items-start mb-4">
                         <div class="p-3 {{ $is_booked ? 'bg-red-50 text-red-600' : 'bg-blue-50 text-blue-600' }} rounded-2xl">
                             <i class="fas fa-door-open"></i>
@@ -142,9 +188,9 @@
     </section>
 
     <!-- Procedure Section -->
-    <section class="py-24 bg-white" id="prosedur">
+    <section class="py-24 bg-slate-50" id="prosedur">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-slate-900 rounded-[3rem] p-8 md:p-16 text-white relative overflow-hidden">
+            <div class="bg-slate-900 rounded-[3rem] p-8 md:p-16 text-white relative overflow-hidden shadow-2xl">
                 <div class="grid md:grid-cols-2 gap-16 relative z-10">
                     <div>
                         <h2 class="text-3xl md:text-5xl font-extrabold mb-8 leading-tight">Prosedur Layanan Sarpras SMK</h2>
@@ -189,7 +235,7 @@
     </section>
 
     <!-- Footer -->
-    <footer class="bg-slate-900 text-white py-16">
+    <footer class="bg-white border-t border-slate-100 py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h3 class="text-2xl font-bold mb-4 flex items-center justify-center gap-2">
                 @if(isset($settings['school_logo']))
@@ -199,17 +245,51 @@
                 @endif
                 {{ $settings['school_name'] ?? 'SISARPA' }}
             </h3>
-            <p class="text-slate-400 mb-8">{{ $settings['school_address'] ?? 'Official Asset Management System' }}</p>
+            <p class="text-slate-400 mb-8">{{ $settings['school_address'] ?? 'Official Asset Management System' }} | {{ $settings['school_city'] ?? '' }}</p>
             <div class="flex justify-center gap-6 mb-12">
-                <a href="#" class="text-white hover:text-blue-400 transition text-xl"><i class="fab fa-facebook"></i></a>
-                <a href="#" class="text-white hover:text-blue-400 transition text-xl"><i class="fab fa-instagram"></i></a>
-                <a href="#" class="text-white hover:text-blue-400 transition text-xl"><i class="fab fa-youtube"></i></a>
+                <a href="#" class="text-slate-400 hover:text-blue-600 transition text-xl"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="text-slate-400 hover:text-blue-600 transition text-xl"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="text-slate-400 hover:text-blue-600 transition text-xl"><i class="fab fa-youtube"></i></a>
             </div>
-            <div class="border-t border-slate-800 pt-8 text-xs text-slate-500 font-semibold tracking-widest uppercase">
+            <div class="pt-8 text-[10px] text-slate-400 font-extrabold tracking-widest uppercase">
                 &copy; {{ date('Y') }} SISTEM INVENTARIS SARANA PRASARANA SEKOLAH. ALL RIGHTS RESERVED.
             </div>
         </div>
     </footer>
 
+    <script>
+        // Active Menu on Scroll Logic
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.6 // Trigger when 60% of section is visible
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                const id = entry.target.getAttribute('id');
+                const menuLink = document.querySelector(`nav a[href="#${id}"]`);
+                
+                if (entry.isIntersecting) {
+                    // Remove active from all links
+                    document.querySelectorAll('nav a').forEach(link => {
+                        link.classList.remove('text-blue-600', 'border-b-2', 'border-blue-600');
+                        link.classList.add('text-slate-600');
+                    });
+                    
+                    // Add active to current link
+                    if (menuLink) {
+                        menuLink.classList.remove('text-slate-600');
+                        menuLink.classList.add('text-blue-600', 'border-b-2', 'border-blue-600');
+                    }
+                }
+            });
+        }, observerOptions);
+
+        // Selection of sections to monitor
+        document.querySelectorAll('header[id], section[id]').forEach((section) => {
+            observer.observe(section);
+        });
+    </script>
 </body>
 </html>
